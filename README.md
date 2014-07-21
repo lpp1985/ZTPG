@@ -39,3 +39,8 @@ The detail is as follow:
 
         BLAT = blat # blat location
 
+Usage
+-----
+Typing run.py on the command line will give you a list of options.
+* Some Typical use cases:*
+
