@@ -1,0 +1,93 @@
+
+body
+{
+	margin: 0;
+	padding: 0;
+} 
+
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+marker#licensing {
+  fill: green;
+}
+
+path.link.licensing {
+  stroke: green;
+}
+
+path.link.resolved {
+  stroke-dasharray: 0,2 1;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+text {
+  font: 10px Helvetica Neue, Helvetica, Verdana,sans-serif;
+  pointer-events: none;
+}
+
+text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
+}
+div{
+	border-style: outset;
+	 border-width: 5px;
+}
+div b{
+	color:Blue;
+}
+#ref_graph{
+    top: 100px;
+	left: 321px;
+    width: 565px;
+
+}
+#end_graph{
+    top: 100px;
+    left: 923px;
+    width: 565px;
+    border-color: red;
+}
+
+
+div.graphViewer{
+	position: absolute;
+	width:35%;
+	padding:10px;
+}
+div.blackbg {
+  position: absolute;
+  left: -50px;
+  top: 100px;
+  width: 250px;
+  padding-right: 5px;
+  padding-left: 65px;
+  padding-top: 0px;
+  padding-bottom: 8px;
+  text-align: left;
+  z-index: 2;
+  background-color: #234;
+  color: #fff;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  opacity: 0.8;
+}
+div.transp {
+  background-color: #555;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+  filter: alpha(opacity=60);
+  opacity: 0.6;
+}
+
