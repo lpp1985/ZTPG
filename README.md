@@ -26,10 +26,15 @@ Installation
 ------------
 Download the whole directory and then unzip it.Modify Config.ini File.
 The detail is as follow:
+        
         CELEDIR =    #The directory ZTPG installed
+        
         NUCMER=  #nucmer location for mummer
+        
         DELTAFILTER     = # delta-filter location for mummer
+        
         SHOWCOORDS      = show-coords # show-coords location for mummer
+
         CELERAASSEMBLER = /pub/SOFTWARE/Pacbio/smrtanalysis/current/analysis/bin/wgs-7.0/Linux-amd64/bin/ #Celera Assembler binary location
 
         BLAT = blat # blat location
