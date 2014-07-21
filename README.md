@@ -19,7 +19,18 @@ to
         define AS_READ_MAX_NORMAL_LEN_BITS 15
 to support reads longer than 2048bp
 * Bash5 Package
-* Pbdagon Package or Sprai Package(http://zombie.cb.k.u-tokyo.ac.jp/sprai/)
+* [pbdagcon Package](https://github.com/PacificBiosciences/pbdagcon) or [Sprai Package](http://zombie.cb.k.u-tokyo.ac.jp/sprai/)
+* [blat](http://users.soe.ucsc.edu/~kent/src/)
+* [Mummer](http://mummer.sourceforge.net/)
+Installation
+------------
+Download the whole directory and then unzip it.Modify Config.ini File.
+The detail is as follow:
+        CELEDIR =    #The directory ZTPG installed
+        NUCMER=  #nucmer location for mummer
+        DELTAFILTER     = # delta-filter location for mummer
+        SHOWCOORDS      = show-coords # show-coords location for mummer
+        CELERAASSEMBLER = /pub/SOFTWARE/Pacbio/smrtanalysis/current/analysis/bin/wgs-7.0/Linux-amd64/bin/ #Celera Assembler binary location
 
-
+        BLAT = blat # blat location
 
