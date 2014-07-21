@@ -13,10 +13,10 @@ Prerequirement
 * Celera Assembler
 Please install Celera Assemberl through source file. When you install Celera Assembler, you need to modify the source code. In AS_global.h in src directory of Celera Assembler, change from
 
-   #define AS_READ_MAX_NORMAL_LEN_BITS 11
+        define AS_READ_MAX_NORMAL_LEN_BITS 11
 to
 
-   #define AS_READ_MAX_NORMAL_LEN_BITS 15
+        define AS_READ_MAX_NORMAL_LEN_BITS 15
 to support reads longer than 2048bp
 * Bash5 Package
 * Pbdagon Package or Sprai Package(http://zombie.cb.k.u-tokyo.ac.jp/sprai/)
