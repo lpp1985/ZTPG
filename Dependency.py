@@ -173,7 +173,11 @@ class  Contig_Graph(nx.DiGraph):
             else:
                 print(candidate_path)
 
-
+    def same(self,raw,new):
+        for each_succ in self.successors(raw):
+            self.add_bi_edge(new,each_succ)
+        for each_pre in self.predecessors(raw):
+            self.add_bi_edge(each_pre, new)
 def Remove_rev_Singleton(  G   ):
     '''将所有的反向singleton删除，这样得到的图比较好看'''
     singleton_deleted = []
@@ -573,13 +577,20 @@ def Mummer_parse(  file_name  ):
     #运行nucmer
     output_category = Ddict()
     os.system(  "nucmer --maxmatch %(genome)s  %(genome)s -p cache"%( {"genome":file_name }  )  )
+    contain_data =  os.popen(  """show-coords  cache.delta -odTlb -L 40  | grep -P  "\[\CONTAINED\]$" """      )
+    already_contained = {}
+    for line in contain_data:
+        line_l = line.split("\t")
+        contained = line_l[-3]
+        already_contained[contained] = ''
     align_data = os.popen(  """show-coords  cache.delta -odTl -L 40  | grep -P  "\[\S+\]$" """      )
     align_data.next()
     for line in align_data:
         line_l = line.strip().split("\t")
-
         identy,refname,queryname,tag  = Get_list( line_l,[6,11,12,13]   )
         if refname ==queryname:
+            continue
+        if queryname in already_contained or refname in already_contained:
             continue
         if float(  identy  )<90:
             continue
@@ -684,7 +695,7 @@ def Relation_parse(  file_name ,output_category,name_prefix   ):
         else:
             frame ='+'
         contain_rela[big_contig+'+'][small_contig+frame] = ""
-        #CONTAIN.write( small_contig+'\t'+big_contig+'\n'   )
+        CONTAIN.write( small_contig+'\t'+big_contig+'\n'   )
     #检查contained关系
     for each_line in output_category[ "CONTAINED"  ]:
         line_l = each_line.strip().split("\t")
@@ -695,7 +706,7 @@ def Relation_parse(  file_name ,output_category,name_prefix   ):
         else:
             frame ='+'		
         contain_rela[big_contig+frame][small_contig+"+"] = ""
-        #CONTAIN.write( small_contig+'\t'+big_contig+'\n'   )
+        CONTAIN.write( small_contig+'\t'+big_contig+'\n'   )
 
     for data in containeed_line:
         CONTAIN.write(data)

@@ -59,15 +59,9 @@ if __name__ == '__main__':
 		path_string = '; '.join(each_path)
 		
 	
-		#i+=1
-		#DETAIL.write("Optimize%s"%(i)+'\t'+path_string+"\tPlasmid\n")
+		i+=1
+		DETAIL.write("Optimize%s"%(i)+'\t'+path_string+"\tPlasmid\n")
 	DETAIL.write("Longest1"+"\t"+'; '.join(longest_path)+"\tPlasmid\n")
-	longest_path = set(longest_path)
-	for each_path in Find_Cycle(Seq_Graph):
-		if len(set(each_path) - longest_path)>3:
-			print(len(each_path))
-			i+=1
-			DETAIL.write("Optimize%s"%(i)+'\t'+path_string+"\tPlasmid\n")
 	#print(longest_path)
 	assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o cache.fasta  "%(DETAIL.name,options.sequence)
 	

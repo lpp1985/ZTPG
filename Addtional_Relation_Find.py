@@ -38,12 +38,44 @@ if __name__=='__main__':
     total_cycle = Find_Cycle(G_Contig)
     DETAIL = open( options.output+".detail",'w')
     i=0
+    New_Graph = Contig_Graph()
     for each_cycle in total_cycle:
         i+=1
+        New_Graph.add_bi_cycle(each_cycle)
         DETAIL.write("Addtional_Optimize%s\t%s\tPlasmid\n"%(   i,'; '.join(each_cycle)   )    )
+    Multi_Graph = Contig_Graph()
+    doubt_node = {}
+    for each_node in New_Graph.node:
+        if len(New_Graph.successors(each_node))>=2 and len(New_Graph.predecessors(each_node))>=2:
+            
+            if each_node not in Multi_Graph.node:
+                doubt_node[each_node] = ''
+                Multi_Graph.add_bi_node(each_node)
+    if len(doubt_node)==1:
+        for each_doubt in doubt_node:
+            new_node_name = "same_as_"+each_doubt
+            New_Graph.add_bi_node(new_node_name)
+            New_Graph.same(each_doubt, new_node_name)
+            
+    already_have = []
+    for each_cycle in Find_Cycle(New_Graph):
+        Multi_Graph = Contig_Graph()
+        path = "  ".join(each_cycle)
+        name = re.search("same_as_(\S+)",path)
+        if name and name.group(1) in each_cycle:
+            
+            Multi_Graph.add_bi_cycle(each_cycle)
+            all_node = Multi_Graph.node
+            if all_node not in already_have:
+                i+=1
+                DETAIL.write("Addtional_Optimize%s\t%s\tPlasmid\n"%(   i,'; '.join(each_cycle).replace("same_as_","")   )    )
+                already_have.append(all_node)
+            else:
+                continue
     assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o cache.fasta  "%(DETAIL.name,options.fasta)
 
     os.system(assembly_command)
     ENDSEQ = open(options.output+".fasta",'w')
     ENDSEQ.write(open('cache.fasta' ,'rU').read() )
     os.remove("cache.fasta")    
+    

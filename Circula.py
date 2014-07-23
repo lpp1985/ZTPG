@@ -16,9 +16,12 @@ def Circulation(sequence):
 	
 	command_line = """ nucmer --maxmatch %s %s 1>/dev/null 2>/dev/null && show-coords -coHT  out.delta | grep "\[END\]"   """%( RAW.name,HEAD.name  ) 
 	stdout = os.popen( command_line  ).read()
-	start_location = int(stdout.split()[0])
-	end = sequence[:start_location]
-	end = re.sub( "(\w{60})" ,"\\1\n", end )
+	try:
+		start_location = int(stdout.split()[0])
+		end = sequence[:start_location]
+		end = re.sub( "(\w{60})" ,"\\1\n", end )
+	except:
+		return sequence
 
 	return end
 
