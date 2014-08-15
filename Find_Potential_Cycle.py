@@ -65,19 +65,18 @@ if __name__ == '__main__':
 	longest_path = set(longest_path)
 	for each_path in Find_Cycle(Seq_Graph):
 		if len(set(each_path) - longest_path)>3:
-			print(len(each_path))
+			path_string= '; '.join(each_path)
 			i+=1
 			DETAIL.write("Optimize%s"%(i)+'\t'+path_string+"\tPlasmid\n")
 	#print(longest_path)
-	assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o cache.fasta  "%(DETAIL.name,options.sequence)
-	
+	assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o %s  "%(DETAIL.name,options.sequence,options.output+'.fasta')
 	os.system(assembly_command)
 	
-	ENDSEQ = open(options.output+'.fasta','w')
-	for t,s in fasta_check(open(options.sequence,'rU')):
-		name = t.strip()[1:].split("\t")[0]
+	#ENDSEQ = open(options.output+'.fasta','w')
+	##for t,s in fasta_check(open(options.sequence,'rU')):
+		##name = t.strip()[1:].split("\t")[0]
 
-		ENDSEQ.write(t+s)
-	ENDSEQ.write(open('cache.fasta' ,'rU').read() )
-	os.remove("cache.fasta")
+		##ENDSEQ.write(t+s)
+	#ENDSEQ.write(open('cache.fasta' ,'rU').read() )
+	#os.remove("cache.fasta")
 	

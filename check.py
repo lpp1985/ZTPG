@@ -14,3 +14,5 @@ Draw_Web("./123.html",G_Output)
 all_cycle = Find_Cycle(G_Output)
 for cycle in all_cycle:
 	print(cycle)
+	
+print(G_Output.nodes())

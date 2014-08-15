@@ -62,16 +62,25 @@ if __name__ == '__main__':
 		i+=1
 		DETAIL.write("Optimize%s"%(i)+'\t'+path_string+"\tPlasmid\n")
 	DETAIL.write("Longest1"+"\t"+'; '.join(longest_path)+"\tPlasmid\n")
-	#print(longest_path)
-	assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o cache.fasta  "%(DETAIL.name,options.sequence)
+	ENDSEQ = open(options.output+'.fasta','w')
+	assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o %s  "%(DETAIL.name,options.sequence,ENDSEQ.name())
 	
 	os.system(assembly_command)
+	STATUS = open(ENDSEQ.name.replace(".fasta",".status"),'a')
 	
-	ENDSEQ = open(options.output+'.fasta','w')
 	for t,s in fasta_check(open(options.sequence,'rU')):
 		name = t.strip()[1:].split("\t")[0]
-
-		ENDSEQ.write(t+s)
+		status = t.strip()[1:].split("\t")[-1]
+		
+		if status=="Plasmid":
+			
+			ENDSEQ.write(t+s)
+			STATUS.write(name+"\tPlasmid\t"+"%s\n"%(
+			        len(
+			                re.sub("\s+",'',s) 
+			        )
+			)
+			             )	
 	ENDSEQ.write(open('cache.fasta' ,'rU').read() )
 	os.remove("cache.fasta")
 	

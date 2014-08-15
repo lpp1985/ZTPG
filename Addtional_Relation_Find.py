@@ -72,10 +72,9 @@ if __name__=='__main__':
                 already_have.append(all_node)
             else:
                 continue
-    assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o cache.fasta  "%(DETAIL.name,options.fasta)
-
+      
+    assembly_command = cele_path+"/Assembly_by_Nucmer.py  -i %s  -u %s  -o %s  "%(DETAIL.name,options.fasta,options.output+".fasta")
+    
     os.system(assembly_command)
-    ENDSEQ = open(options.output+".fasta",'w')
-    ENDSEQ.write(open('cache.fasta' ,'rU').read() )
-    os.remove("cache.fasta")    
+    ENDSEQ = open(options.output+".fasta",'a')  
     

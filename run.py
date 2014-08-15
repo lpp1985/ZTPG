@@ -62,11 +62,13 @@ if __name__=='__main__':
     print ( colored( "Preparing ok!!",'green' )  )
     print( colored(  "Step1 Get best reads!!!!",'blue' )  )
     best_output = cache_path+'best.fasta'
-    best_reads_command = cele_path+'''/get_best_reads.py -g %(gkp)s -b %(unig)s -o %(best)s'''%( 
+    all_reads = cache_path+'all.fasta'
+    best_reads_command = cele_path+'''/get_best_reads.py -g %(gkp)s -b %(unig)s -o %(best)s -a %(allread)s'''%( 
         {
             'unig':uni,
             'best':best_output,
-            "gkp":gkp
+            "gkp":gkp,
+            "allread":all_reads
         } 
                                                                                                   )
 
@@ -140,7 +142,7 @@ if __name__=='__main__':
             "overlap":overlap
         }  
     )
-
+    
     
     err = subprocess.Popen(  shlex.split( assembly_commandline ),stderr=subprocess.PIPE  ).communicate()
     
@@ -186,5 +188,34 @@ if __name__=='__main__':
     
         sys.exit()	
         
-        
+    print(  colored('Step7 Consensus Build!!','blue')   )
+    print("Please choose which one you want to use as final result!")
+    print(colored("1)Error-free Assembly result, the staistical infomation is:","green") )
+    print(open(output+'.status').read() )
+    print(colored("2)Topological Optimized Assembly result, the staistical infomation is:","green") )
+    print(open(output+'.optimize.status').read() )
+    print(colored("3)Redundency removal  Assembly result, the staistical infomation is:","green") )
+    print(open(output+'.addtional.status').read() )
+    choosed =""
+    #for test
+    #choosed ="2"
     
+    while  choosed not in[ "1","2","3"]:
+        choosed = raw_input("Please choose,1 or 2 or 3 ?")
+    if choosed =="1":
+        end_seq = output+".fasta"
+    elif choosed =="2":
+        end_seq = output+".optimize.fasta"
+    else:
+        end_seq = output+".addtional.fasta"
+
+    
+    consensus_commandline = cele_path+"""/Consensus_Build.py   -r  %(end_seq)s -a %(all_read)s  -o %(out)s.consensus.fasta """%(
+            {
+                "end_seq":end_seq,
+                "out":output,
+                "all_read":all_reads
+            }
+    )    
+    os.system(consensus_commandline)
+    os.system("./cons  final_consensus")

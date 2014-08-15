@@ -33,7 +33,8 @@ def Get_AllReads(file_name):
 def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
     #store all sequence to a hash to prepare for output
     root_path = os.getcwd()
-
+    STATUS = open( re.sub("[^\.]+$",'status',OUTPUT.name) ,'w')   
+    STATUS.write("ID\tStatus\tLength\n")
     for line in RAW:
         line = line.strip()
         line_l = line.strip().split('\t')
@@ -44,6 +45,13 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 line_l[0], line_l[-1], all_raw_seq_hash[line_l[1]  ]   
             )
                          )
+            STATUS.write(
+                line_l[0]+'\t'+line_l[-1].strip()+'\t%s\n'%(
+                    len(
+                        re.sub("\s+","",all_raw_seq_hash[line_l[1]  ])
+                    )
+                )
+            )            
         else:
             i=0
             all_reads = {}
@@ -90,6 +98,13 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 line_l[0], line_l[-1],end_sequence   
             )
                          )    
+            STATUS.write("%s\t%s\t%s\n"%( 
+                            line_l[0], line_l[-1].strip(),len(
+                                re.sub("\s+","",end_sequence)
+                            )
+                        )
+                                     )  
+            
 
 
 

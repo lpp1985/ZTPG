@@ -30,6 +30,8 @@ def Get_AllReads(file_name):
 
 def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash,overlap):
     #store all sequence to a hash to prepare for output
+    STATUS = open( re.sub("[^\.]+$",'status',OUTPUT.name) ,'w')   
+    STATUS.write("ID\tStatus\tLength\n")
     root_path = os.getcwd()
 
     for line in RAW:
@@ -43,6 +45,12 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash,overlap):
                 line_l[0], line_l[-1], all_raw_seq_hash[line_l[1]  ]   
             )
                          )
+            STATUS.write(
+                line_l[0]+'\t'+line_l[-1].strip()+'\t%s\n'%(len(
+                    re.sub("\s+","",all_raw_seq_hash[line_l[1]  ])
+                )
+                                                )
+            )
         else:
             contig_list = line_l[1].split("; ")
             end_sequence = all_raw_seq_hash[contig_list[0]]
@@ -58,6 +66,12 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash,overlap):
                 line_l[0], line_l[-1],end_sequence   
             )
                          )    
+            STATUS.write("%s\t%s\t%s\n"%( 
+                line_l[0], line_l[-1].strip(),len(
+                    re.sub("\s+","",end_sequence)
+                )
+            )
+                         )  
 
 
 

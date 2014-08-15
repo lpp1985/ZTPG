@@ -32,7 +32,10 @@ def get_para(   ):
 		              dest = "output",
 		              help=" Fasta file record all reads appeared in best.edges file "
 		              )	
-
+	parser.add_option("-a","--ALL",action= "store",
+		              dest = "allreads",
+		              help=" Fasta file record all reads "
+		              )		
 	(options, args) = parser.parse_args()
 	return options,args
 
@@ -43,6 +46,7 @@ if __name__=='__main__':
 
 	gkp = options.gkp
 	output = options.output
+	all_read = options.allreads
 	all_nodes = {}
 	for line in open( best+'/best.edges','rU'):
 		if '#' in line:
@@ -53,8 +57,10 @@ if __name__=='__main__':
 		all_nodes[ line_l[2] ] = ''
 		all_nodes[ line_l[4]  ] = ''
 	print( colored("We Have %s Best reads!!"%(len(all_nodes)),"yellow") )
+	
 	commandline = celera_assembler+'/gatekeeper  -dumpfragments -withsequence %s'%( gkp )
 	END = open(output,'w'  )
+	ALL = open(all_read,'w')
 	READS_DATA = os.popen( commandline  )
 	data = re.split( "\n(?=fragmentIdent)" ,READS_DATA.read())
 	for each_block in data:
@@ -64,6 +70,8 @@ if __name__=='__main__':
 		except:
 			
 			print each_block
+		sequence = re.search("fragmentSequence\s+\=\s+(\S+)",each_block).group(1)
+		ALL.write('>%s\n'%(frag_id )+sequence +'\n')
 		if frag_id in all_nodes:
-			sequence = re.search("fragmentSequence\s+\=\s+(\S+)",each_block).group(1)
+			
 			END.write( '>%s\n'%(frag_id )+sequence +'\n')

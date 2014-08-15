@@ -471,7 +471,7 @@ def Get_Overlap_Graph(FILE):
             tag = '+'
         else:
             tag = '-'
-        data.append( line_l[-2]+tag )
+        data.append( line_l[4]+tag )
         Overlap_Graph.add_bi_path(data)
     Overlap_Graph = Transitive_Remove(Overlap_Graph)
     Overlap_Graph.remove_bi_node("0+")
