@@ -58,7 +58,7 @@ if __name__=='__main__':
     output = options.output
     cache_path = './cache/'
     if not  os.path.exists(  cache_path  ):
-        os.mkdir(  cache_path )
+        os.makedirs(  cache_path )
     print ( colored( "Preparing ok!!",'green' )  )
     print( colored(  "Step1 Get best reads!!!!",'blue' )  )
     best_output = cache_path+'best.fasta'

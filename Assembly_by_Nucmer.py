@@ -91,9 +91,9 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
 
             end_sequence = ''.join( [ all_reads[x] for x in sorted(all_reads) ]    )
             
-            if line_l[-1]=="Plasmid":
+#            if line_l[-1]=="Plasmid":
 
-                end_sequence =Circulation(end_sequence)
+#                end_sequence =Circulation(end_sequence)
             OUTPUT.write(">%s\t%s\n%s\n"%( 
                 line_l[0], line_l[-1],end_sequence   
             )

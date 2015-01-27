@@ -33,7 +33,7 @@ if __name__=='__main__':
     output_category = Mummer_parse( raw_file  )
 
     G_Contig= Relation_parse( raw_file, output_category, options.output )
-
+    #print(G_Contig.edges())
     Draw_Web("%s.html"%(options.output), G_Contig)
     total_cycle = Find_Cycle(G_Contig)
     DETAIL = open( options.output+".detail",'w')
