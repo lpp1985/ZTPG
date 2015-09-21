@@ -17,7 +17,6 @@ import networkx as nx
 import numpy as np
 from configure import *
 from networkx.readwrite import json_graph
-from networkx.algorithms.clique import find_cliques
 import string
 libary=string.maketrans('+-','-+')
 Assembled_Contig_no = 1
@@ -198,22 +197,6 @@ def Transitive_Remove( G ):
     isinstance( G_output,Contig_Graph  )
     isinstance(    G,Contig_Graph     )
     for node in G:
-        if len( G.successors( node ) )==2:
-
-            for each_child in G.successors(  node ):
-                for each_child_child in G.successors_iter( each_child  ):
-                    if G.has_edge( node,each_child_child    ):
-                        G_output.remove_bi_edge(  node,each_child_child    )
-
-    return G_output
-def Get_Long_edges( G ):
-    '''对于一些tiling结构进行修剪，遍历下游节点，如果下游节点的下游节点与上上游节点相连，
-    则将该边删除
-    '''
-    G_output = deepcopy(G)
-    isinstance( G_output,Contig_Graph  )
-    isinstance(    G,Contig_Graph     )
-    for node in G:
         if len( G.successors( node ) )>1:
 
             for each_child in G.successors(  node ):
@@ -222,6 +205,7 @@ def Get_Long_edges( G ):
                         G_output.remove_bi_edge(  node,each_child_child    )
 
     return G_output
+
 
 def Get_list(  has_list,location_list  ):
     #将对应的location的元素打入到输出列表中
@@ -502,7 +486,7 @@ def Draw_Web(file_name,G):
     root_path = os.path.split(file_name)[0]
     if not os.path.exists(  root_path+'/css' ):
         shutil.copytree( cele_path+'/Template/css', root_path+'/css'  )
-
+    
     if not os.path.exists(  root_path+'/js' ):
         shutil.copytree( cele_path+'/Template/js', root_path+'/js'  )     
     END = open( file_name ,'w' )
@@ -561,14 +545,14 @@ def Find_Overhang(Raw_queryID,Raw_subjectID,overlstore):
         )
     detail_block = None
     for line in detailout:
-        detail_block = line.strip().split()
-        break
+	detail_block = line.strip().split()
+	break
     #detail_block = detailout.next().strip().split()
 
     if not detail_block:
 
         print("error!!!")
-        return ""
+	return ""
 
     else:
         if Raw_queryID[-1]=="+" and Raw_subjectID[-1]=="-":
@@ -594,8 +578,8 @@ def Mummer_parse(  file_name  ):
     """
     #运行nucmer
     output_category = Ddict()
-    os.system(  "nucmer --maxmatch   %(genome)s   %(genome)s   -p cache"%( {"genome":file_name }  )  )
-    contain_data =  os.popen(  """ delta-filter  -i 95 cache.delta > filter.delta&&show-coords  filter.delta -odTlb -L 40  | grep -P  "\[\CONTAINED\]$" """      )
+    os.system(  "nucmer --maxmatch %(genome)s  %(genome)s -p cache"%( {"genome":file_name }  )  )
+    contain_data =  os.popen(  """ delta-filter  -i 100 cache.delta > filter.delta&&show-coords  filter.delta -odTlb -L 40  | grep -P  "\[\CONTAINED\]$" """      )
     already_contained = {}
     for line in contain_data:
         line_l = line.split("\t")
@@ -618,7 +602,7 @@ def Mummer_parse(  file_name  ):
     return output_category
 
 
-def Relation_parse(  file_name ,output_category,name_prefix,contain_trim=1   ):
+def Relation_parse(  file_name ,output_category,name_prefix   ):
     """
     接受所有的ContigID
     根据Mummer_parse获得的结果，对identity的节点，和contain的节点进行删除，取长的保留。
@@ -640,7 +624,7 @@ def Relation_parse(  file_name ,output_category,name_prefix,contain_trim=1   ):
 
 
     """
-
+    
 
 
 
@@ -676,19 +660,9 @@ def Relation_parse(  file_name ,output_category,name_prefix,contain_trim=1   ):
                 if small in G_start.pred:
                     small_pred = set( G_start.pred[small] )
                 else:
-                    small_pred =set([])	
-                #print("Big is %s!!"%(big))
-                #print("Small is %s!!"%(small))
-                #print("Big succ is %s!!"%(big_succ))
-                #print("Small succ is %s!!"%(small_succ))
-                #print("big pred is %s!!"%(big_pred))
-                #print ("Small pred is %s!!"%(small_pred))
-                    
+                    small_pred =set([])				
                 if small_succ<=big_succ and small_pred <=big_pred:
-                    #print("Remove %s"%(small))
                     G.remove_bi_node(small)
-                   
-            #print("###############")
                 #if big =="XV05_100+":
                     #print(big,small)
                     #print(big_succ,small_succ)
@@ -810,13 +784,12 @@ def Relation_parse(  file_name ,output_category,name_prefix,contain_trim=1   ):
 
 
 
+
     #修图，将tiling边删除
     #print(contain_rela)
-    if contain_trim==1:
-        G_contig_init = _Trun_contain_Rela(G_contig_init, contain_rela)
- 
+    G_contig_init = _Trun_contain_Rela(G_contig_init, contain_rela)
+
     G_Trimed = Transitive_Remove( G_contig_init )
-    #G_Trimed = G_contig_init
 
 
     #双向图变成单向图
@@ -837,7 +810,7 @@ def Find_Cycle(Graph):
     all_cycle = []
     already_cycle = []
     for each_cycle in nx.simple_cycles(Graph):
-
+        
         this_graph =nx.DiGraph()
         this_graph.add_cycle(each_cycle)
         edges = this_graph.edge
@@ -854,6 +827,7 @@ def Find_Cycle(Graph):
             continue
 
     return all_cycle
+    
 
 
 

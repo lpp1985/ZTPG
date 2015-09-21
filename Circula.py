@@ -8,6 +8,7 @@ import os,tempfile,sys
 import subprocess
 #对拼接结果进行环化
 def Circulation(sequence):
+	return sequence
 	sequence = re.sub( "\s+","",sequence )
 	RAW = open(tempfile.mktemp() ,'w' )
 	RAW.write(">RAW\n%s\n"%(  sequence ) )
@@ -22,6 +23,7 @@ def Circulation(sequence):
 		end = re.sub( "(\w{60})" ,"\\1\n", end )
 	except:
 		print(command_line)
+		print( " is not cir!!")
 		return sequence
 
 	return end.upper()
@@ -29,9 +31,10 @@ def Circulation(sequence):
 if __name__=="__main__":
 	RAW = fasta_check(open(sys.argv[1],'rU'))
 	END = open(sys.argv[2],'w')
+	STAT = open("seq_status.tsv",'w')
 	for t,s in RAW:
 		
 		s = Circulation(s)
 		END.write(t+s+'\n')
-	
+		STAT.write(t[1:-1]+'\t%s\n'%( len( re.sub("\s+","",s)   )  ))
 		

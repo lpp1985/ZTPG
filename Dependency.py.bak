@@ -595,7 +595,7 @@ def Mummer_parse(  file_name  ):
     #运行nucmer
     output_category = Ddict()
     os.system(  "nucmer --maxmatch   %(genome)s   %(genome)s   -p cache"%( {"genome":file_name }  )  )
-    contain_data =  os.popen(  """ delta-filter  -i 95 cache.delta > filter.delta&&show-coords  filter.delta -odTlb -L 40  | grep -P  "\[\CONTAINED\]$" """      )
+    contain_data =  os.popen(  """ delta-filter  -i 100 cache.delta > filter.delta&&show-coords  filter.delta -odTlb -L 40  | grep -P  "\[\CONTAINED\]$" """      )
     already_contained = {}
     for line in contain_data:
         line_l = line.split("\t")
@@ -618,7 +618,7 @@ def Mummer_parse(  file_name  ):
     return output_category
 
 
-def Relation_parse(  file_name ,output_category,name_prefix,contain_trim=1   ):
+def Relation_parse(  file_name ,output_category,name_prefix   ):
     """
     接受所有的ContigID
     根据Mummer_parse获得的结果，对identity的节点，和contain的节点进行删除，取长的保留。
@@ -812,8 +812,7 @@ def Relation_parse(  file_name ,output_category,name_prefix,contain_trim=1   ):
 
     #修图，将tiling边删除
     #print(contain_rela)
-    if contain_trim==1:
-        G_contig_init = _Trun_contain_Rela(G_contig_init, contain_rela)
+    G_contig_init = _Trun_contain_Rela(G_contig_init, contain_rela)
  
     G_Trimed = Transitive_Remove( G_contig_init )
     #G_Trimed = G_contig_init

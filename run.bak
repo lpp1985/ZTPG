@@ -135,7 +135,7 @@ if __name__=='__main__':
     #对矫正的结果进行拼接
     print(  colored('Step4 Assembly Contig !!','blue')   )
     assembly_output = output
-    assembly_commandline = cele_path+'''/Assembly_by_Nucmer.py -i %(output)s.detail -o %(output)s.fasta -u %(bes)s   '''%( 
+    assembly_commandline = cele_path+'''/Assembly_Through_Graph.py -i %(output)s.detail -o %(output)s.fasta -u %(bes)s -v %(overlap)s  '''%( 
         {
             "output":output,
             "bes":best_output,

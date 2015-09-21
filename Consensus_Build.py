@@ -83,7 +83,7 @@ SINGLETONSEQ  = $(PREFIX).singletons.seq
 ## Cat all data
 1: cat $(REF) $(READ) >total_cache.fasta
 ## add quality
-2: %(cele_path)sadd_quality.py total_cache.fasta total_cache.qual 20
+2: %(cele_path)s/add_quality.py total_cache.fasta total_cache.qual 20
 ## build afg
 3: %(amos)stoAmos -s total_cache.fasta -q total_cache.qual -o  $(TGT)
 ## extract read list

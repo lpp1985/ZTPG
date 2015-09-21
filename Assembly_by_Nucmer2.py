@@ -80,16 +80,18 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 }
             )
                                   )
-
+            end_sequence = all_reads[1]
+            cache_data = {}
             for data in nucmer_out:
                 data_l = data.split("\t")
-                if int(data_l[-2]) - int(data_l[-3])==1 and int(data_l[2])<10 :
+                if int(data_l[-2]) - int(data_l[-3])==1 and data_l[-4]=="1" and data_l[-5]=="1" :
                     name = int(data_l[-2])
+                    if name not in cache_data:
 
-                    all_reads[name] = all_reads[name][ int(data_l[3]):  ]
+                        cache_data[name] = all_reads[name][ int(data_l[3]):  ]
 
 
-            end_sequence = ''.join( [ all_reads[x] for x in sorted(all_reads) ]    )
+            end_sequence = end_sequence+''.join( [ cache_data[x] for x in sorted(cache_data) ]    )
             
             if line_l[-1]=="Plasmid":
 
