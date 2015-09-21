@@ -66,7 +66,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 all_reads[i] = all_raw_seq_hash[  each_data  ]
 
             os.system(
-                '''nucmer --maxmatch --forward      %(query)s %(query)s -p %(out)s >/dev/null 2>&1'''%(
+                '''nucmer --maxmatch --forward -l 100 -b 500 -g 500     %(query)s %(query)s -p %(out)s >/dev/null 2>&1'''%(
                     {
                         "query":CACHE_READS.name,
                         "out":cache_path+'/out'
@@ -90,9 +90,18 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
 
                         cache_data[name] = all_reads[name][ int(data_l[3]):  ]
 
-
-            end_sequence = end_sequence+''.join( [ cache_data[x] for x in sorted(cache_data) ]    )
-            
+            if len(cache_data) == len(all_reads)-1:
+                end_sequence = end_sequence+''.join( [ cache_data[x] for x in sorted(cache_data) ]    )
+            else:
+                unique = {}
+                for key in all_reads:
+                    if key ==1:
+                        continue
+                    if key not in cache_data:
+                        unique[key] = ""
+                print(unique.keys())
+                print("Not in Contig")
+                raise EOFError
             if line_l[-1]=="Plasmid":
 
                 end_sequence =Circulation(end_sequence)
