@@ -600,7 +600,7 @@ def Mummer_parse(  file_name  ):
     for line in contain_data:
         line_l = line.split("\t")
         contained = line_l[-3]
-        #already_contained[contained] = ''
+        already_contained[contained] = ''
     align_data = os.popen(  """show-coords  cache.delta -odTl -L 40  | grep -P  "\[\S+\]$" """      )
     align_data.next()
     for line in align_data:
