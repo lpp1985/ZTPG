@@ -19,16 +19,19 @@ from  optparse import OptionParser
 from Circula import *
 
 def Get_AllReads(file_name):
+    max_length= 0
     all_data = {}
     DATA = fasta_check(open(file_name,'rU') )
     for t,s in DATA:
         s = re.sub("\s+",'',s)
         s_ = complement(s)
+        if len(s)>max_length:
+            max_length=len(s)
         name =t[1:].split()[0]
         all_data[name+'+']=s
         all_data[name+'-']=s_
         
-    return all_data
+    return all_data,max_length
 
 def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
     #store all sequence to a hash to prepare for output
@@ -66,7 +69,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 all_reads[i] = all_raw_seq_hash[  each_data  ]
 
             os.system(
-                '''nucmer --maxmatch --forward -l 100 -b 500 -g 500     %(query)s %(query)s -p %(out)s >/dev/null 2>&1'''%(
+                '''nucmer --maxmatch --forward    %(query)s %(query)s -p %(out)s >/dev/null 2>&1'''%(
                     {
                         "query":CACHE_READS.name,
                         "out":cache_path+'/out'
@@ -80,31 +83,34 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 }
             )
                                   )
+            top_number= i
+            str_graph = nx.DiGraph()
             end_sequence = all_reads[1]
-            cache_data = {}
+            
             for data in nucmer_out:
+
                 data_l = data.split("\t")
-                if int(data_l[-2]) - int(data_l[-3])==1 and data_l[-4]=="1" and data_l[-5]=="1" :
-                    name = int(data_l[-2])
-                    if name not in cache_data:
 
-                        cache_data[name] = all_reads[name][ int(data_l[3]):  ]
+                start_node = int(data_l[-3])
+                end_node = int(data_l[-2])
+                if start_node==end_node:
+                    continue
+                str_graph.add_edge(
+                    start_node,end_node,
+                    weight=max_length - int(data_l[5]),
+                    seq=all_reads[end_node][ int(data_l[3]):  ]
+                )
+            #try:
+            assem_paths = nx.shortest_path(str_graph,1,top_number,"weight")
+            #except:
+                #print("%s is not assemblable!!"%(line_l[0]))
+                #raise IOError
+            for k in xrange(1,len(assem_paths)):
+                end_sequence +=  str_graph[ assem_paths[k-1] ][ assem_paths[k] ][ "seq"  ]
+             
+            #if line_l[-1]=="Plasmid":
 
-            if len(cache_data) == len(all_reads)-1:
-                end_sequence = end_sequence+''.join( [ cache_data[x] for x in sorted(cache_data) ]    )
-            else:
-                unique = {}
-                for key in all_reads:
-                    if key ==1:
-                        continue
-                    if key not in cache_data:
-                        unique[key] = ""
-                print(unique.keys())
-                print("Not in Contig")
-                raise EOFError
-            if line_l[-1]=="Plasmid":
-
-                end_sequence =Circulation(end_sequence)
+                #end_sequence =Circulation(end_sequence)
             OUTPUT.write(">%s\t%s\n%s\n"%( 
                 line_l[0], line_l[-1],end_sequence   
             )
@@ -148,7 +154,7 @@ transfer trim overlap relationship'''
     ##############################################################
     #store all sequence to a hash to prepare for output
     root_path = os.getcwd()
-    all_raw_seq_hash =Get_AllReads(unitig)
+    all_raw_seq_hash,max_length =Get_AllReads(unitig)
         
 
 
