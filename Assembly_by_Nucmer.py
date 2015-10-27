@@ -6,7 +6,7 @@
 
 
 from lpp import *
-import shutil
+import shutil,copy
 from configure import *
 from time import time
 from hashlib import md5
@@ -93,20 +93,23 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
 
                 start_node = int(data_l[-3])
                 end_node = int(data_l[-2])
-                if start_node==end_node:
+                if start_node>=end_node:
                     continue
                 str_graph.add_edge(
                     start_node,end_node,
-                    weight=max_length - int(data_l[5]),
+
                     seq=all_reads[end_node][ int(data_l[3]):  ]
                 )
-            #try:
-            assem_paths = nx.shortest_path(str_graph,1,top_number,"weight")
-            #except:
-                #print("%s is not assemblable!!"%(line_l[0]))
-                #raise IOError
-            for k in xrange(1,len(assem_paths)):
-                end_sequence +=  str_graph[ assem_paths[k-1] ][ assem_paths[k] ][ "seq"  ]
+            assm_paths = [1]
+            m=1
+            while m<top_number:
+                new_s = min([x for x in  str_graph[m] if x >m])
+                assm_paths.append(new_s)
+                m = new_s            
+            
+
+            for k in xrange(1,len(assm_paths)):
+                end_sequence +=  str_graph[ assm_paths[k-1] ][ assm_paths[k] ][ "seq"  ]
              
             #if line_l[-1]=="Plasmid":
 
