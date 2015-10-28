@@ -102,7 +102,18 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 )
             assm_paths = [1]
             m=1
+            need_delete = {}
+            for key in str_graph:
+                if not str_graph.predecessors(key):
+                    if key !=1:
+                        need_delete[key] = ""
+                if not str_graph.successors(key):
+                    if key !=top_number:
+                        need_delete[key] = ""
+            if len(need_delete):
+                str_graph.remove_nodes_from(  need_delete.keys() )
             while m<top_number:
+
                 new_s = min([x for x in  str_graph[m] if x >m])
                 assm_paths.append(new_s)
                 m = new_s            
