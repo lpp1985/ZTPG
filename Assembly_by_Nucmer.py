@@ -111,7 +111,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                     if key !=top_number:
                         need_delete[key] = ""
             if len(need_delete):
-                print(line_l[0],+'\t'+"\t".join(need_delete)+" is delete!!!")
+                print(line_l[0]+'\t'+"\t".join(map(lambda x: str(x),need_delete))+" is delete!!!")
             
             if len(need_delete):
                 str_graph.remove_nodes_from(  need_delete.keys() )
@@ -130,7 +130,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                     
             print("%s is Assembling"%(line_l[0]))
             
-            print("Path is %s !!!!"%("->".join(assm_paths)))
+            print("Path is %s !!!!"%("->".join(map(lambda x: str(x),assm_paths))))
             print("##################################")
             print("##################################\n\n\n\n\n")
             for k in xrange(1,len(assm_paths)):
