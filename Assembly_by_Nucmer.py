@@ -110,7 +110,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 if not str_graph.successors(key):
                     if key !=top_number:
                         need_delete[key] = ""
-            if need_delete:
+            if len(need_delete):
                 print(line_l[0],+'\t'+"\t".join(need_delete)+" is delete!!!")
             
             if len(need_delete):
