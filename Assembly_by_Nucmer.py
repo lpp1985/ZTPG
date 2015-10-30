@@ -110,15 +110,25 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 if not str_graph.successors(key):
                     if key !=top_number:
                         need_delete[key] = ""
+            print(line_l[0],+'\t'+"\t".join(need_delete)+" is delete!!!")
+            
             if len(need_delete):
                 str_graph.remove_nodes_from(  need_delete.keys() )
             while m<top_number:
-
-                new_s = min([x for x in  str_graph[m] if x >m])
-                assm_paths.append(new_s)
-                m = new_s            
+                try:
+                    new_s = min([x for x in  str_graph[m] if x >m])
+                    assm_paths.append(new_s)
+                    m = new_s            
+                except:
+                    print(line_l[0]+"is Error!!!")
+                    
+                    
+                    
+            print("%s is Assembling"%(line_l[0]))
             
-
+            print("Path is %s !!!!"%("->".join(assm_paths)))
+            print("##################################")
+            print("##################################\n\n\n\n\n")
             for k in xrange(1,len(assm_paths)):
                 end_sequence +=  str_graph[ assm_paths[k-1] ][ assm_paths[k] ][ "seq"  ]
              
