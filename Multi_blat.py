@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #coding:utf-8
 # Author:  LPP
 # Purpose:用来进行多进程同步blast比对
