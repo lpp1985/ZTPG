@@ -111,7 +111,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                     if key !=top_number:
                         need_delete[key] = ""
             if len(need_delete):
-                print(line_l[0]+'\t'+"\t".join(map(lambda x: contig_list[x-1],need_delete))+" is delete!!!")
+                print(line_l[0]+'\t'+"\t".join(map(lambda x: contig_list[x-1],sorted(need_delete  )))+" is delete!!!")
             
             if len(need_delete):
                 str_graph.remove_nodes_from(  need_delete.keys() )
