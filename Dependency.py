@@ -603,6 +603,7 @@ def Mummer_parse(  file_name  ):
         already_contained[contained] = ''
     align_data = os.popen(  """show-coords  cache.delta -odTl -L 40  | grep -P  "\[\S+\]$" """      )
     align_data.next()
+    already_contained = {}
     for line in align_data:
         line_l = line.strip().split("\t")
         identy,refname,queryname,tag  = Get_list( line_l,[6,11,12,13]   )
@@ -716,6 +717,7 @@ def Relation_parse(  file_name ,output_category,name_prefix,contain_trim=1   ):
     contain_rela = Ddict()
     for each_line in output_category[ "CONTAINS"  ]:
         line_l = each_line.strip().split("\t")
+	
         big_contig,small_contig = Get_list( line_l,[11,12] )
         frame = line_l[10]
         if frame =="-1":
