@@ -58,7 +58,8 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
         else:
             i=0
             all_reads = {}
-            assembly_path = './assembly_new/'
+            out_path = os.path.dirname( os.path.abspath(OUTPUT.name) )
+            assembly_path = out_path+'/assembly_new/'
 
             cache_path = assembly_path+line_l[0]+'/'
             check_path(  cache_path   )
@@ -128,11 +129,11 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                     
                     
                     
-            print("%s is Assembling"%(line_l[0]))
+            #print("%s is Assembling"%(line_l[0]))
             
-            print("Path is %s !!!!"%("->".join(map(lambda x: str(x),assm_paths))))
-            print("##################################")
-            print("##################################\n\n\n\n\n")
+            #print("Path is %s !!!!"%("->".join(map(lambda x: str(x),assm_paths))))
+            #print("##################################")
+            #print("##################################\n\n\n\n\n")
             for k in xrange(1,len(assm_paths)):
                 end_sequence +=  str_graph[ assm_paths[k-1] ][ assm_paths[k] ][ "seq"  ]
              

@@ -594,14 +594,15 @@ def Mummer_parse(  file_name  ):
     """
     #运行nucmer
     output_category = Ddict()
-    os.system(  "nucmer --maxmatch   %(genome)s   %(genome)s   -p cache"%( {"genome":file_name }  )  )
-    contain_data =  os.popen(  """ delta-filter  -i 95 cache.delta > filter.delta&&show-coords  filter.delta -odTlb -L 40  | grep -P  "\[\CONTAINED\]$" """      )
+    cache_path = os.path.dirname(os.path.abspath(file_name))
+    os.system(  "nucmer --maxmatch   %(genome)s   %(genome)s   -p %(path)s/cache >/dev/null 2>&1"%( {"genome":file_name,"path":cache_path }  )  )
+    contain_data =  os.popen(  """ delta-filter  -i 95 %s/cache.delta > %s/filter.delta&&show-coords  %s/filter.delta -odTlb -L 40  | grep -P  "\[\CONTAINED\]$" """%( cache_path, cache_path,cache_path )      )
     already_contained = {}
     for line in contain_data:
         line_l = line.split("\t")
         contained = line_l[-3]
         already_contained[contained] = ''
-    align_data = os.popen(  """show-coords  cache.delta -odTl -L 40  | grep -P  "\[\S+\]$" """      )
+    align_data = os.popen(  """show-coords  %s/cache.delta -odTl -L 40  | grep -P  "\[\S+\]$" """%( cache_path )      )
     align_data.next()
     already_contained = {}
     for line in align_data:
