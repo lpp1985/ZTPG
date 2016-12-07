@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Genome Assembly &Finishing platform - Zipper</title>
+    <script type="text/javascript" src="./js/d3.v2.js"></script>    
+<script type="text/javascript">
+// #Nodes Infomation
+var nodes = [{"name": "round1_28-", "id": "round1_28-"}, {"name": "round1_28+", "id": "round1_28+"}, {"name": "round1_12-", "id": "round1_12-"}, {"name": "round1_12+", "id": "round1_12+"}, {"name": "round1_8-", "id": "round1_8-"}, {"name": "round1_23+", "id": "round1_23+"}, {"name": "round1_23-", "id": "round1_23-"}, {"name": "round1_8+", "id": "round1_8+"}, {"name": "round1_33+", "id": "round1_33+"}, {"name": "round1_33-", "id": "round1_33-"}, {"name": "round1_31+", "id": "round1_31+"}, {"name": "round1_1-", "id": "round1_1-"}, {"name": "round1_1+", "id": "round1_1+"}, {"name": "round1_29+", "id": "round1_29+"}, {"name": "round1_25-", "id": "round1_25-"}, {"name": "round1_29-", "id": "round1_29-"}, {"name": "round1_43+", "id": "round1_43+"}, {"name": "round1_43-", "id": "round1_43-"}, {"name": "round1_6+", "id": "round1_6+"}, {"name": "round1_9-", "id": "round1_9-"}, {"name": "round1_9+", "id": "round1_9+"}, {"name": "round1_20+", "id": "round1_20+"}, {"name": "round1_20-", "id": "round1_20-"}, {"name": "round1_32-", "id": "round1_32-"}, {"name": "round1_32+", "id": "round1_32+"}, {"name": "round1_2+", "id": "round1_2+"}, {"name": "round1_2-", "id": "round1_2-"}, {"name": "round1_11+", "id": "round1_11+"}, {"name": "round1_11-", "id": "round1_11-"}, {"name": "round1_35+", "id": "round1_35+"}, {"name": "round1_35-", "id": "round1_35-"}, {"name": "round1_21+", "id": "round1_21+"}, {"name": "round1_21-", "id": "round1_21-"}, {"name": "round1_19+", "id": "round1_19+"}, {"name": "round1_19-", "id": "round1_19-"}, {"name": "round1_3-", "id": "round1_3-"}, {"name": "round1_3+", "id": "round1_3+"}, {"name": "round1_17+", "id": "round1_17+"}, {"name": "round1_17-", "id": "round1_17-"}, {"name": "round1_10-", "id": "round1_10-"}, {"name": "round1_10+", "id": "round1_10+"}, {"name": "round1_34+", "id": "round1_34+"}, {"name": "round1_34-", "id": "round1_34-"}, {"name": "round1_26-", "id": "round1_26-"}, {"name": "round1_26+", "id": "round1_26+"}, {"name": "round1_18-", "id": "round1_18-"}, {"name": "round1_18+", "id": "round1_18+"}, {"name": "round1_16+", "id": "round1_16+"}, {"name": "round1_16-", "id": "round1_16-"}, {"name": "round1_37-", "id": "round1_37-"}, {"name": "round1_37+", "id": "round1_37+"}, {"name": "round1_27-", "id": "round1_27-"}, {"name": "round1_27+", "id": "round1_27+"}, {"name": "round1_4+", "id": "round1_4+"}, {"name": "round1_4-", "id": "round1_4-"}, {"name": "round1_15-", "id": "round1_15-"}, {"name": "round1_15+", "id": "round1_15+"}, {"name": "round1_40+", "id": "round1_40+"}, {"name": "round1_39-", "id": "round1_39-"}, {"name": "round1_39+", "id": "round1_39+"}, {"name": "round1_40-", "id": "round1_40-"}, {"name": "round1_36+", "id": "round1_36+"}, {"name": "round1_36-", "id": "round1_36-"}, {"name": "round1_5+", "id": "round1_5+"}, {"name": "round1_24+", "id": "round1_24+"}, {"name": "round1_24-", "id": "round1_24-"}, {"name": "round1_5-", "id": "round1_5-"}, {"name": "round1_38-", "id": "round1_38-"}, {"name": "round1_14+", "id": "round1_14+"}, {"name": "round1_41+", "id": "round1_41+"}, {"name": "round1_41-", "id": "round1_41-"}, {"name": "round1_38+", "id": "round1_38+"}, {"name": "round1_31-", "id": "round1_31-"}, {"name": "round1_14-", "id": "round1_14-"}, {"name": "round1_6-", "id": "round1_6-"}, {"name": "round1_25+", "id": "round1_25+"}, {"name": "round1_7+", "id": "round1_7+"}, {"name": "round1_7-", "id": "round1_7-"}, {"name": "round1_42-", "id": "round1_42-"}, {"name": "round1_13-", "id": "round1_13-"}, {"name": "round1_13+", "id": "round1_13+"}, {"name": "round1_42+", "id": "round1_42+"}, {"name": "round1_22+", "id": "round1_22+"}, {"name": "round1_22-", "id": "round1_22-"}, {"name": "round1_30-", "id": "round1_30-"}, {"name": "round1_30+", "id": "round1_30+"}];
+// the $$$ get replaced by matlab with the correct HIS link information
+	var colormap1 = [ '#00F','#10F','#20E','#30E','#40D','#50D','#60C','#70C','#80B','#90B','#A0A','#B0A','#C09','#D09','#E08','#F08','#F08' ];
+	var colormap2 = [ '#00F','#01F','#02E','#03E','#04D','#05D','#06C','#07C','#08B','#09B','#0AA','#0BA','#0C9','#0D9','#0E8','#0F8','#0F8' ];
+	var colormap3 = [ '#000','#010','#020','#030','#040','#050','#060','#070','#080','#090','#0A0','#0B0','#0C0','#0D0','#0E0','#0F0','#0F0' ];
+	var colormap4 = [ '#000','#100','#200','#300','#400','#500','#600','#700','#800','#900','#A00','#B00','#C00','#D00','#E00','#F00','#F00' ];
+	var raw_links =  [{"source": 0, "target": 69}, {"source": 0, "target": 9}, {"source": 5, "target": 74}, {"source": 5, "target": 46}, {"source": 6, "target": 76}, {"source": 6, "target": 12}, {"source": 8, "target": 1}, {"source": 9, "target": 15}, {"source": 11, "target": 5}, {"source": 11, "target": 28}, {"source": 12, "target": 20}, {"source": 12, "target": 50}, {"source": 13, "target": 8}, {"source": 13, "target": 60}, {"source": 15, "target": 48}, {"source": 15, "target": 80}, {"source": 18, "target": 27}, {"source": 18, "target": 6}, {"source": 19, "target": 11}, {"source": 19, "target": 18}, {"source": 24, "target": 25}, {"source": 24, "target": 29}, {"source": 24, "target": 79}, {"source": 24, "target": 48}, {"source": 24, "target": 55}, {"source": 26, "target": 51}, {"source": 26, "target": 61}, {"source": 26, "target": 23}, {"source": 26, "target": 54}, {"source": 27, "target": 76}, {"source": 27, "target": 12}, {"source": 28, "target": 74}, {"source": 28, "target": 46}, {"source": 30, "target": 51}, {"source": 30, "target": 84}, {"source": 30, "target": 61}, {"source": 30, "target": 32}, {"source": 30, "target": 23}, {"source": 30, "target": 54}, {"source": 31, "target": 29}, {"source": 31, "target": 48}, {"source": 31, "target": 55}, {"source": 34, "target": 63}, {"source": 34, "target": 41}, {"source": 42, "target": 33}, {"source": 42, "target": 81}, {"source": 44, "target": 45}, {"source": 44, "target": 77}, {"source": 45, "target": 27}, {"source": 45, "target": 6}, {"source": 46, "target": 43}, {"source": 47, "target": 61}, {"source": 47, "target": 84}, {"source": 47, "target": 32}, {"source": 47, "target": 13}, {"source": 47, "target": 23}, {"source": 47, "target": 54}, {"source": 47, "target": 51}, {"source": 49, "target": 11}, {"source": 49, "target": 18}, {"source": 52, "target": 25}, {"source": 52, "target": 29}, {"source": 52, "target": 79}, {"source": 52, "target": 48}, {"source": 52, "target": 55}, {"source": 53, "target": 25}, {"source": 53, "target": 29}, {"source": 53, "target": 79}, {"source": 53, "target": 48}, {"source": 53, "target": 55}, {"source": 56, "target": 84}, {"source": 56, "target": 51}, {"source": 56, "target": 61}, {"source": 56, "target": 32}, {"source": 56, "target": 23}, {"source": 56, "target": 54}, {"source": 57, "target": 15}, {"source": 62, "target": 25}, {"source": 62, "target": 29}, {"source": 62, "target": 55}, {"source": 62, "target": 48}, {"source": 62, "target": 79}, {"source": 62, "target": 80}, {"source": 66, "target": 33}, {"source": 66, "target": 81}, {"source": 70, "target": 1}, {"source": 74, "target": 20}, {"source": 74, "target": 50}, {"source": 76, "target": 43}, {"source": 77, "target": 5}, {"source": 77, "target": 28}, {"source": 78, "target": 63}, {"source": 78, "target": 41}, {"source": 79, "target": 13}, {"source": 79, "target": 61}, {"source": 80, "target": 51}, {"source": 80, "target": 61}, {"source": 80, "target": 23}, {"source": 80, "target": 54}, {"source": 85, "target": 29}, {"source": 85, "target": 48}, {"source": 85, "target": 55}] ;
+	var ref_links =    []  ;
+
+
+
+
+</script>
+<style type="text/css">
+@import url("./css/style.css");
+@import url("./css/style_graph.css");
+</style>
+<script type="text/javascript" src="./js/graph.js"></script>    
+  </head>
+  <body>
+<div class="blackbg transp" onMouseOut="this.classList.add('transp')" onMouseOver="this.classList.remove('transp')">
+<h1 style="font-size: 19pt;"><a href="http://www.baidu.com" style="font-size: 19pt; color: #ffffff;"><!--span style="font-size: 28pt;"-->Genome Finishing<!--/span--> Platform</a></h1>
+<span style="font-size: 9pt;"><a href="http://www.baidu.com" style="color: white; text-decoration: underline;">Examples</a>: E. coli chemogenomics, single-gene knockouts (<a href="http://www.ncbi.nlm.nih.gov/pubmed/21185072" target="_blank" style="color: white; text-decoration: underline;">Phenotypic landscape of a bacterial cell, Cell, 2011</a>)</span>
+<hr style="color: #aaa; border: 1px #aaa solid;">
+
+<table><tr><td colspan="2" style="color: #fff;">Network controls</td></tr>
+<tr><td style="font-size: 8pt;" align="right">Force:</td><td colspan="2">
+<input type="radio" name="master" onClick="thawNodes(); force.start()" value="Thaw nodes" style="color: #fff;" checked="checked"/>on 
+<input type="radio" name="master" onClick="freezeNodes(); force.stop()" value="Freeze nodes" style="color: #fff;"/> off 
+</td></tr>
+<tr><td style="font-size: 8pt; text-align: right;">Charge:</td><td>
+<input type="range" name="charge" min="-3000" max="0" step="1" value="-3000" onChange="force.charge(this.value); force.start();document.getElementById('chargeReport').innerHTML = this.value;">
+</td>
+<td style="font-size: 7pt;"><span id="chargeReport">-3000</span></td>
+</tr>
+<tr><td style="font-size: 8pt; text-align: right;">Link:</td><td>
+<input type="range" name="linkDistance" min="0" max="4000" step="1" value="75" onChange="force.linkDistance(this.value); force.start();document.getElementById('linkDistanceReport').innerHTML = this.value;">
+</td>
+<td style="font-size: 7pt;"><span id="linkDistanceReport">75</span></td>
+</tr>
+<tr><td style="font-size: 8pt; text-align: right;">Gravity:</td><td>
+<input type="range" name="gravity" min="0" max="2" step=".001" value="1" onChange="force.gravity(this.value); force.start(); document.getElementById('gravityReport').innerHTML = this.value;">
+</td>
+<td style="font-size: 7pt;"><span id="gravityReport">1</span></td>
+</tr>
+<tr><td style="font-size: 8pt; text-align: right;">Friction:</td><td>
+<input type="range" name="friction" min="0" max="1" step=".01" value="0.8" onChange="force.friction(this.value); force.start(); document.getElementById('frictionReport').innerHTML = this.value;">
+</td>
+<td style="font-size: 7pt;"><span id="frictionReport">0.8</span></td>
+</tr>
+<tr><td width="25px"></td><td colspan="3">
+<input type="button" onClick="force.alpha(force.alpha() + .2)" value="Energize!" style="color: #000; width: 90px; font-size: 7.5pt;"/>
+<input type="button" onClick="location.reload();" value="Reset" style="color: #000; width: 90px; font-size: 7.5pt;"/>
+</td></tr>
+<tr><td style="font-size: 8pt; text-align: right;">Node:</td><td colspan="2">
+<input type="range" name="circleRadius" id="circleRadius" min="3" max="20" step="1" value="6" onChange="circle.attr('r', function(d) { return document.getElementById('circleRadius').value });">
+</td></tr>
+<tr><td style="font-size: 8pt; text-align: right;">Text:</td><td colspan="2">
+<input type="range" name="fontSize" id="fontSize" min="3" max="20" step="1" value="12" onChange="text.selectAll('text').attr('style', function(d) { return 'font-size: ' + document.getElementById('fontSize').value + 'pt;'});">
+</td></tr>
+<tr><td style="font-size: 8pt; text-align: right;">Center:</td><td colspan="2">
+<select onChange="fixViewNodeNr = this.value; d3.select(circle[0][fixPreviousViewNodeNr]).style('fill','#ccc'); center_view_on_node();" style="font-size: 7.5pt; width: 90pt;" id="fixViewNodeSelect">
+  <option value="_none" selected="selected">None</option>
+  <option value="_whole_graph">All</option>
+
+</select>
+</td></tr>
+<tr><td style="font-size: 8pt; text-align: right;">Edge:</td><td colspan="2">
+<select onChange="setColormap(this.value)" style="font-size: 7.5pt; width: 90pt;">
+  <option value="#000">Black</option>
+  <option value="#666">Gray</option>
+  <option value="#00C">Blue</option>
+  <option value="#C00">Red</option>
+  <option value="#0C0">Green</option>
+</select>
+</td></tr>
+<tr><td colspan="3" style="color: #fff;">
+<hr style="color: #aaa; border: 1px #aaa solid;">
+Data Upload | Dwonload
+<input type="button" onClick="window.open(window.location.pathname.replace('.html','_output.csv'),'_blank');" value="Upload Data" style="color: #000; width: 180px;"/>
+<input type="button" onClick="window.open(window.location.pathname.replace('.html','.xgmml'),'_blank');" value="Download Data" style="color: #000; width: 180px;"/>
+<input type="button" onClick="window.open(window.location.pathname.replace('.html','_report.html'),'_blank');" value="View report" style="color: #000; width: 180px;"/>
+<hr style="color: #aaa; border: 1px #888888 solid;">
+</td></tr>
+<tr><td colspan="3" style="font-size: 9pt;" align="center">
+Copyright &copy; 2012 <a href="">Lipengpeng</a>
+</td></tr></table>
+</div>
+
+
+<table  width="1520px">
+    <tr height="33px"></tr>
+    <tr >
+        <td  class="blankleft">a</td>
+        <th class="graph_contain"><b>Raw Overlap Graph</b></th>
+        <th  class="graph_contain"><b>Raw Overlap Graph</b></th>
+
+    </tr>
+    <tr></tr>
+</table>
+<div id="ref_graph" class="graphViewer">
+
+
+</div>
+
+<div id="end_graph" class="graphViewer">
+
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+
+        var zoomVal = 10;
+        var fixViewNodeNr = "_none";
+        var fixPreviousViewNodeNr = "0";
+
+        // Compute the distinct nodes from the links.
+        raw_links.forEach(function(link) {
+            link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+            link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+        });
+
+
+        // initialize trying to get document width and height, but if this is a new browser frame/window we likely get 0. There max by default to something reasonable.
+        var w = 100,
+                h = 100,
+                fill = d3.scale.category20();
+
+        nodes = d3.values(nodes);
+        n = nodes.length;
+
+        positionNodes();
+
+        var force = d3.layout.force()
+                .nodes(nodes)
+                .links(raw_links)
+                .friction(0.8)
+                .gravity(1)
+                .alpha(0.1)
+                .linkDistance(75)
+                .charge(-3000)
+                .on("tick", tick)
+                .start();
+
+
+        var svg = d3.select("div#ref_graph").append("svg:svg")
+                .attr("pointer-events", "auto")
+                .attr("id", "refSVG")
+                .append('svg:g')
+                .call(d3.behavior.zoom().on("zoom", redraw))
+                .append('svg:g');
+
+        // rectangle is required for drag behavior. Only drag events on this thing will be caught...
+        svg.append('svg:rect')
+                .attr("x", "-50%")
+                .attr("y", "-50%")
+                .attr('width', "200%")
+                .attr('height', "200%")
+                .attr('fill', 'white');
+
+        function redraw() {
+            //console.log("here", d3.event.translate, d3.event.scale);
+            svg.attr("transform",
+                    "translate(" + d3.event.translate + ")"
+                            + " scale(" + d3.event.scale + ")");
+        }
+
+        function center_view(x,y) {
+            //console.log("center_view",x,y)
+            //console.log(svg.viewBox)
+            svg.attr("transform", "translate(" + [(svg.attr("width")/2) - x,(svg.attr("height")/2)- y] + ")");
+        }
+
+        function center_view_on_node() {
+            if (fixViewNodeNr == "_whole_graph") {
+                // get node position minima and maxima
+
+                var maxX = -Infinity;
+                var maxY = -Infinity;
+                var minX = Infinity;
+                var minY = Infinity;
+                nodes.forEach(function(d) { if (d.x > maxX) {maxX = d.x};  if (d.y > maxY) {maxY = d.y}; if (d.x < minX) {minX = d.x}; if (d.y < minY) {minY = d.y};})
+                center_view(maxX - (maxX-minX)/2, maxY - (maxY-minY)/2);
+
+                var allX = [];
+                var allY = [];
+                nodes.forEach(function(d,i) { allX[i] = d.x; allY[i] = d.y;})
+                center_view(d3.mean(allX), d3.mean(allY));
+
+            } else if (fixViewNodeNr != "_none") {
+                // set color of fix node id to yellow
+                d3.select(circle[0][fixViewNodeNr]).style("fill","yellow");
+                // center view on new fix node id
+                center_view(nodes[fixViewNodeNr].x,nodes[fixViewNodeNr].y)
+                // remember previous fix node so we can to remove color...
+                fixPreviousViewNodeNr = fixViewNodeNr;
+            }
+        }
+
+        // Per-type markers, as they don't inherit styles.
+        svg.append("svg:defs").selectAll("marker")
+                .data(["suit", "licensing", "resolved"])
+                .enter().append("svg:marker")
+                .attr("id", String)
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 15)
+                .attr("refY", -1.5)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("orient", "auto")
+                .append("svg:path")
+                .attr("d", "M0,-5L10,0L0,5");
+
+        var path = svg.append("svg:g").selectAll("path")
+                .data(force.links())
+                .enter().append("svg:path")
+                .attr("class", "link" )
+                .attr("style", function(d) { return "stroke: " +colormap1[3]+ "; stroke-width: " + d.strength + "px;"; })
+                .attr("marker-end", function(d) { return "url(#suit)"; });
+
+
+
+        var circle = svg.append("svg:g").selectAll("circle")
+                .data(force.nodes())
+                .enter().append("svg:circle")
+                .attr("r", 6)
+                .call(force.drag);
+        //    .on("click", toggleColor)
+        // The above line allows user to highlight any node in yellow...
+
+        var text = svg.append("svg:g").selectAll("g")
+                .data(force.nodes())
+                .enter().append("svg:g");
+
+        // A copy of the text with a thick white stroke for legibility.
+        text.append("svg:text")
+                .attr("x", 8)
+                .attr("y", ".31em")
+                .attr("class", "shadow")
+                .text(function(d) { return d.name; })
+                .style("font-size","12pt");
+
+        text.append("svg:text")
+                .attr("x", 8)
+                .attr("y", ".31em")
+                .text(function(d) { return d.name; })
+                .style("font-size","12pt");
+
+
+        // Use elliptical arc path segments to doubly-encode directionality.
+        function tick() {
+            path.attr("d", function(d) {
+                var dx = d.target.x - d.source.x,
+                        dy = d.target.y - d.source.y,
+                        dr = Math.sqrt(dx * dx + dy * dy);
+                return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+            });
+
+            circle.attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+            text.attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+            // optionally fix view on a certain node
+            if (fixViewNodeNr != "_none") {
+                center_view_on_node();
+            }
+        }
+
+
+
+
+        // create array for select options (with node name and index)
+        var xSelectOptions = [];
+        nodes.forEach(function(d,i) {
+            xSelectOptions[i] = [d.name, d.index];
+        });
+
+        // write out select options alphabetically sorted by name
+        xSelectOptions.sort(function(a, b){
+            var a=a[0].toLowerCase(), b=b[0].toLowerCase()
+            if (a < b) //sort string ascending
+                return -1
+            if (a > b)
+                return 1
+            return 0 //default return value (no sorting)
+        }).forEach(function(d) {
+                    // Create "option" element with text of node name and value of node index
+                    var selectOption = document.createElement("option");
+                    selectOption.innerHTML = d[0];
+                    selectOption.setAttribute("value", d[1]);
+                    document.getElementById("fixViewNodeSelect").appendChild(selectOption);
+                });
+
+        // this is necessary to set width and height attributes at least once, as they are required for PDF and PNG conversion
+        rescaleGraph();
+
+    </script>
+
+	</body>
+</html>

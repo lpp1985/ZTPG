@@ -1,0 +1,227 @@
+
+body {
+  font 14px Helvetica Neue, Helvetica, Verdana, sans-serif;
+  text-rendering optimizeLegibility;
+  margin-top 1em;
+  overflow-y scroll;
+}
+
+a {
+  color steelblue;
+  text-decoration none;
+}
+
+ahover {
+  text-decoration underline;
+}
+
+.body {
+  width 960px;
+  margin auto;
+}
+
+.topbar a {
+  margin-right .5em;
+}
+
+.content {
+  position relative;
+  margin-left 240px;
+}
+
+.content img {
+  display block;
+  margin auto;
+}
+
+.sidebar {
+  position absolute;
+  left:-240px;
+  width: 230px;
+  font-weight 300;
+  text-align left; 
+}
+
+.gallery {
+  position relative;
+  left -240px;
+  width 970px;
+}
+
+.content .gallery img {
+  display inline;
+  width 226px;
+  height 180px;
+  border solid 2px #ccc;
+  margin-right 10px;
+  margin-bottom 8px;
+}
+
+.content .gallery ahover img {
+  border-color steelblue;
+}
+
+.list {
+  clear left;
+  margin-top 14px;
+}
+
+.list img {
+  float left;
+}
+
+h1 {
+  font-size 36px;
+  font-weight 300;
+  margin-bottom .3em;
+}
+
+.sidebar {
+  color #666;
+}
+
+.sidebar ul {
+  padding-left 0;
+  list-style-type none;
+}
+
+.sidebar li {
+  white-space nowrap;
+  width 230px;
+  overflow hidden;
+  text-overflow ellipsis;
+}
+
+.sidebar h3 {
+  font-weight 300;
+}
+
+.foot {
+  font-weight 300;
+  margin-left 240px;
+  padding-top 3em;
+  width 710px;
+  clear both;
+}
+
+button {
+  background #222 url(imgbutton-overlay.png) repeat-x;
+  font 12px Helvetica Neue, Helvetica, Verdana, sans-serif;
+  color #fff;
+  text-shadow 0 -1px 1px #222;
+  padding 6px 10px 6px 10px;
+  border 0;
+  border-bottom 1px solid #222;
+  min-width 80px;
+  -moz-border-radius 5px;
+  -moz-box-shadow 0 1px 3px #999;
+  -webkit-border-radius 5px;
+  -webkit-box-shadow 0 1px 3px #999;
+}
+
+
+
+.upfile
+{
+    backgroundurl('imguploadFileIcon.png');
+    background-size34px 34px;
+    background-repeatno-repeat;
+    background-positionleft;
+    background-color white;
+    border 1px #aaaaaa solid;
+    padding-left 40px;
+    height 32px;
+    width 456px;
+    margin 15px;
+    margin-top 20px;
+    font-size 14px;
+    font 20px Helvetica Neue, Helvetica, Verdana, sans-serif;
+    text-rendering optimizeLegibility;
+    color #999999;  this is starting color..
+    cursor pointer;
+    vertical-align bottom;
+    padding-top 8px;
+    margin-bottom 10px;
+}
+
+
+.aqua_active{
+  background-color rgba(60, 132, 198, 0.8);
+  border-top-color #8ba2c1;
+  border-right-color #5890bf;
+  border-bottom-color #4f93ca;
+  border-left-color #768fa5;
+  -webkit-box-shadow rgba(66, 140, 240, 0.5) 0px 10px 16px;
+  -moz-box-shadow rgba(66, 140, 240, 0.5) 0px 10px 16px;
+  background-image -webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(28, 91, 155, 0.8)), to(rgba(108, 191, 255, .9)));
+ for FF 3.6 
+  background-image -moz-linear-gradient(rgba(28, 91, 155, 0.8) 0%, rgba(108, 191, 255, .9) 90%);
+  cursor pointer;
+  border-radius 8px;
+}
+
+.aqua_inactive{
+  background-color rgba(132, 132, 132, 1);
+  border-top-color #eee;
+  border-right-color #eee;
+  border-bottom-color #aaa;
+  border-left-color #aaa;
+  color #cccccc;
+  -webkit-box-shadow rgba(66, 140, 240, 0.5) 0px 10px 16px;
+  -moz-box-shadow rgba(66, 140, 240, 0.5) 0px 10px 16px;
+  background-image -webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(141, 141, 141, 0.8)), to(rgba(191, 191, 191, .9)));
+ for FF 3.6 
+  background-image -moz-linear-gradient(rgba(141, 141, 141, 0.8) 0%, rgba(191, 191, 191, .9) 90%);
+  border-radius 8px;
+}
+
+li.pending-file {
+  list-style-type none;
+  margin-left 5px;
+}
+li.pending-filebefore {
+  font-family 'ModernPictogramsNormal';
+  content '{';
+  speak none;
+  padding0 5px;
+  font-size 20px;
+  color #FAA732;
+}
+li.ready-file {
+  list-style-type none;
+}
+li.ready-filebefore {
+  font-family 'ModernPictogramsNormal';
+  content 'o';
+  speak none;
+  padding0 5px;
+  font-size 20px;
+  color #006DCC;
+}
+[data-icon]before {
+  font-family 'ModernPictogramsNormal';
+  content attr(data-icon);
+  speak none;
+  padding0 5px;
+  font-height 12px;
+}
+.graph_contain {
+    width:600px;
+
+    height:50px;
+    align: center;
+    border-radius: 15px; */
+    padding: 0 5px 8px 65px;
+    z-index: 2;
+    background-color: #223344;
+    opacity: 0.8;
+    border-width: 5px;
+    color:#FFFFFF;
+    border-style: outset;
+    border-color: #AA3322;
+
+}
+
+  td.blankleft{
+    width:320px;
+}

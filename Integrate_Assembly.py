@@ -73,6 +73,7 @@ if __name__=='__main__':
                         if candidate_3_overlap != candidate_3_reference:
                             Corrected_overlap_Graph.remove_bi_edge(  reads,candidate_3_overlap     )    
         else:
+            print(   cele_path+'/overlap_check.py  -g %s -q %s -s %s    ' %(  overlapStore, reads,candidate_3_reference  )  ) 
             data = subprocess.check_output( shlex.split( cele_path+'/overlap_check.py  -g %s -q %s -s %s    ' %(  overlapStore, reads,candidate_3_reference  )      )    )
             if data:
 

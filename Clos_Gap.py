@@ -31,9 +31,8 @@ if __name__=='__main__':
     options,args = get_para()
     raw_file = options.fasta
     output_category = Mummer_parse( raw_file  )
-    print(output_category)
     G_Contig= Relation_parse( raw_file, output_category, options.output,contain_trim=0 )
-    print(G_Contig.edges())
+    print( G_Contig.edges()  )
     #total_cycle = Find_Cycle(G_Contig)
     DETAIL = open( options.output+".detail",'w')
     i=0
