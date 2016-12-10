@@ -69,17 +69,38 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 CACHE_READS.write('>reads/%s/0_%s\n%s\n'%(i,len( all_raw_seq_hash[  each_data  ] ) - 1,all_raw_seq_hash[  each_data  ] ) )
                 all_reads[i] = all_raw_seq_hash[  each_data  ]
                 i+=1
-            print('''
+            #print('''
+            #cd %(path)s
+            #%(cele_path)s/DAZZ_DB/fasta2DB %(out)s.db %(query)s &&
+            #%(cele_path)s/DAZZ_DB/DBsplit %(out)s&&
+            #%(cele_path)s//DALIGNER/daligner -e.95 -A %(out)s %(out)s&&
+            #%(cele_path)s//DALIGNER/LAmerge   %(prefix)s %(out)s*.las
+            #rm %(out)s*.las
+            #%(cele_path)s//DALIGNER/LAsort %(prefix)s.las
+            #%(cele_path)s//DALIGNER/LA4Falcon -mog %(out)s %(prefix)s.S.las&&cd %(back)s
+                #'''%(
+                       #{
+                           #"cele_path":cele_path,
+                           #"back": os.getcwd(),
+                           #"path":cache_path,
+                           #"query":CACHE_READS.name,
+                           #"out":cache_path+'/reads',
+                           #"prefix": cache_path+'/out'
+                       #}
+                   #)  
+                #)
+            nucmer_out = os.popen('''
             cd %(path)s
-            fasta2DB %(out)s.db %(query)s &&
-            DBsplit %(out)s&&
-            daligner -e.95 -A %(out)s %(out)s&&
-            LAmerge   %(prefix)s %(out)s*.las
+            %(cele_path)s/DAZZ_DB/fasta2DB %(out)s.db %(query)s &&
+            %(cele_path)s/DAZZ_DB/DBsplit %(out)s&&
+            %(cele_path)s//DALIGNER/daligner -e.95 -A %(out)s %(out)s&&
+            %(cele_path)s//DALIGNER/LAmerge   %(prefix)s %(out)s*.las
             rm %(out)s*.las
-            LAsort %(prefix)s.las
-            LA4Falcon -mog %(out)s %(prefix)s.S.las&&cd %(back)s
+            %(cele_path)s//DALIGNER/LAsort %(prefix)s.las
+            %(cele_path)s//DALIGNER/LA4Falcon -mog %(out)s %(prefix)s.S.las&&cd %(back)s
                 '''%(
                        {
+                           "cele_path":cele_path,
                            "back": os.getcwd(),
                            "path":cache_path,
                            "query":CACHE_READS.name,
@@ -87,27 +108,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                            "prefix": cache_path+'/out'
                        }
                    )  
-                   )
-            nucmer_out = os.popen(
-                '''
-            cd %(path)s
-            fasta2DB %(out)s.db %(query)s &&
-            DBsplit %(out)s&&
-            daligner -e.95 -A %(out)s %(out)s&&
-            LAmerge   %(prefix)s %(out)s*.las
-            rm %(out)s*.las
-            LAsort %(prefix)s.las
-            LA4Falcon -mog %(out)s %(prefix)s.S.las&&cd %(back)s
-                '''%(
-                       {
-                           "back": os.getcwd(),
-                           "path":cache_path,
-                           "query":CACHE_READS.name,
-                           "out":cache_path+'/reads',
-                           "prefix": cache_path+'/out'
-                       }
-                   ) 
-            )
+                )
             all_has = {}
             output_seq_hash = {}
             for data in nucmer_out:
@@ -117,7 +118,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
                 data_l = data.strip().split()
                 
                 if data_l[-1]=="overlap":
-                    print(data_l)
+ 
                     end_node = max( [ int(data_l[0]), int(data_l[1])  ]  )
                     if int(data_l[1]) - int(data_l[0]) ==1 and data_l[4] =="0" and data_l[8]=="0":
                         if int(data_l[8])  - int(data_l[7]) <100 and  int(data_l[9])<100:

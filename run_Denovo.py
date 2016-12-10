@@ -18,16 +18,11 @@ def get_para(   ):
     parser = OptionParser( usage = usage  )
 
 
-    parser.add_option("-g", "--GKP", action="store",
-                      dest="gkp",
-                      help="gatekeeper directory")
+    parser.add_option("-i", "--Reads", action="store",
+                      dest="reads",
+                      help="Raw Reads in Fasta Format!!!")
 
 
-
-    parser.add_option("-u","--UNI",action= "store",
-                      dest = "uni",
-                      help="Unitig directory"
-                      )
 
     parser.add_option("-c","--REF",action= "store",
                       dest = "reference",
@@ -38,20 +33,14 @@ def get_para(   ):
                       dest = "output",
                       help="output file"
                       )			
-    parser.add_option("-v","--OVLA",action= "store",
-                      dest = "overlap",
-                      help="overlap store location!!"
-                      )			
 
     (options, args) = parser.parse_args()
     return options,args
 if __name__=='__main__':
     print( colored(  "Step1 Preparing!!",'blue')   )
     options,args = get_para()
-    gkp = options.gkp
+    reads = options.reads
 
-    uni = options.uni
-    overlap = options.overlap
 
     reference = options.reference
 
@@ -60,15 +49,14 @@ if __name__=='__main__':
     if not  os.path.exists(  cache_path  ):
         os.makedirs(  cache_path )
     print ( colored( "Preparing ok!!",'green' )  )
-    print( colored(  "Step1 Get best reads!!!!",'blue' )  )
-    best_output = cache_path+'best.fasta'
-    all_reads = cache_path+'all.fasta'
-    best_reads_command = cele_path+'''/get_best_reads.py -g %(gkp)s -b %(unig)s -o %(best)s -a %(allread)s'''%( 
+    print( colored(  "Step1 Rename Reads",'blue' )  )
+    format_reads = cache_path+'formatedreads.fasta'
+    all_reads = cache_path+'allreads.fasta'
+    best_reads_command = cele_path+'''/DB_Reads -i %(reads)s  -f Read  -o %(out)s -r %(all)s'''%( 
         {
-            'unig':uni,
-            'best':best_output,
-            "gkp":gkp,
-            "allread":all_reads
+            "reads":reads,
+            "out":format_reads,
+            "all":all_reads
         } 
                                                                                                   )
 
@@ -78,27 +66,86 @@ if __name__=='__main__':
     else:
         print(colored(err[0],'red'))
         print( colored('Step1 Error!','red') )
-        #sys.exit()    
-
-    ##开始进行参考图的构建
-    print(  colored("Step2 Align best reads to Reference. Running!!" ,'blue')    )
-    reference_output = cache_path+'reference_graph'
-
-    reference_commandline = cele_path+'''/celera_blat.py -r %(reference)s -b %(best_reads)s -o%(out)s'''%( 
+        #sys.exit()   
+    
+    print(  colored("Step2 Align all Reads Each Other to Detect Overlap" ,'blue')    )
+    buildDB_Command = cele_path+'''/DAZZ_DB/fasta2DB Reads %(reads)s '''%( 
         {
-            'reference':reference,
-            'best_reads':best_output,
-            'out':reference_output
-        }
+            "reads":format_reads
+        }    
     )
-
-    err = subprocess.Popen(  shlex.split( reference_commandline ),stderr=subprocess.PIPE  ).communicate()
-    if  not err[0]:
-        print( colored("best reads alignment OK!!",'green')  )
+    err = subprocess.Popen(  shlex.split( buildDB_Command ),stderr=subprocess.PIPE  ).communicate()
+    if not err[0]:
+        print( colored("Reads Build Database OK!!","green")  )  
     else:
-        print(err[0])
-        print( 'Step2 Error!' )
-        sys.exit()	
+        print(colored(err[0],'red'))
+        print( colored('Step2  Reads Build  Error!','red') )    
+        sys.exit()   
+        
+    splitDB_Command = cele_path+'''/DAZZ_DB/DBsplit Reads'''    
+    err = subprocess.Popen(  shlex.split( splitDB_Command ),stderr=subprocess.PIPE  ).communicate()
+    if not err[0]:
+        print( colored("Split Reads  Database OK!!","green")  )  
+    else:
+        print(colored(err[0],'red'))
+        print( colored('Step2  Split Reads  Database Error!','red') )    
+        sys.exit()    
+        
+        
+        
+        
+    SeqAlign_Command = cele_path+'''/DALIGNER/HPC.daligner -v -B40 -T32 -t16 -e.95 -l1000 -s1000 Reads | csh -v '''  
+    #os.system(SeqAlign_Command)
+    #err = subprocess.Popen(  shlex.split( SeqAlign_Command ),stderr=subprocess.PIPE  ).communicate()
+    #if not err[0]:
+        #print( colored("Reads Self-Align   OK!!","green")  )  
+    #else:
+        #print(colored(err[0],'red'))
+        #print( colored('Step2 Reads Self-Align  Error!','red') )    
+        #sys.exit()   
+    
+    
+    MergeAlign_Command = cele_path+'''/DALIGNER/LAmerge  Alignment Reads*.las'''    
+    print(MergeAlign_Command)
+    err = subprocess.Popen(  shlex.split( MergeAlign_Command ),stderr=subprocess.PIPE  ).communicate()
+    if not err[0]:
+        #os.system("rm Reads*.las ")
+        print( colored("Reads Self-Align Merge   OK!!","green")  )  
+    else:
+        print(colored(err[0],'red'))
+        print( colored('Step2 Reads Self-Align Merge Error!','red') )    
+        sys.exit()     
+    
+    SortAlign_Command = cele_path+'''/DALIGNER/LAsort  Merge'''    
+    err = subprocess.Popen(  shlex.split( SortAlign_Command ),stderr=subprocess.PIPE  ).communicate()
+    if not err[0]:
+        os.system("mv Merge.S.las Merge.las")
+        print( colored("Reads Self-Align sort   OK!!","green")  )  
+    else:
+        print(colored(err[0],'red'))
+        print( colored('Step2 Reads Self-Align Merge Error!','red') )    
+        sys.exit()         
+
+    
+    LA4Falcon_Command = cele_path+'''/DALIGNER/LA4Falcon -mog Reads  Merge >Alignment.m4'''    
+    err = subprocess.Popen(  shlex.split( LA4Falcon_Command ),stderr=subprocess.PIPE  ).communicate()
+    if not err[0]:
+       
+        print( colored("Reads LA4Falcon  OK!!","green")  )  
+    else:
+        print(colored(err[0],'red'))
+        print( colored('Step2 LA4Falcon Error!','red') )    
+        sys.exit()         
+
+    LAFilter_Command = cele_path+'''/DAFilter -i Alignment.m4 -o FilterAlignment.m4'''    
+    err = subprocess.Popen(  shlex.split( LAFilter_Command ),stderr=subprocess.PIPE  ).communicate()
+    if not err[0]:
+
+        print( colored("Reads LA4Filter  OK!!","green")  )  
+    else:
+        print(colored(err[0],'red'))
+        print( colored('Step2 LA4Filter Error!','red') )    
+        sys.exit()         
 
 
 
@@ -109,27 +156,19 @@ if __name__=='__main__':
 
 
 
-    #开始运行图整合算法 Integrate_Assembly
-    #开始进行参考图的构建
+    
+    #开始进行Contig构建
     print(  colored("Step3 Reference Integrated Assembly Start!!" ,'blue')    )
-    integrated_output = output
 
-    intergate_commandline = cele_path+'''/Integrate_Assembly.py -c %(reference)s -u %(unitig)s -o %(out)s  -v %(overlap)s'''%( 
-        {
-            'reference':reference_output,
-            'unitig':uni,
-            'out':integrated_output,
-            "overlap":overlap,
-        }
-    )
-    print(intergate_commandline)
-    err = subprocess.Popen(  shlex.split( intergate_commandline ),stderr=subprocess.PIPE  ).communicate()
+
+    contig_commandline = cele_path+'''/Generate_Contig.py -i FilterAlignment.m4  -o %(out)s  '''%( output )
+    err = subprocess.Popen(  shlex.split( contig_commandline ),stderr=subprocess.PIPE  ).communicate()
     if  not err[0]:
-        print( colored("Reads Integrated Okay!",'green')  )
+        print( colored("Contig Generate Okay!",'green')  )
 
     else:
         print(err[0])
-        print( 'Step3 Error!'  )
+        print( 'Step3 Contig Generate Error!'  )
 	   
  
     #对矫正的结果进行拼接
@@ -138,7 +177,7 @@ if __name__=='__main__':
     assembly_commandline = cele_path+'''/Assembly_by_daligner.py -i %(output)s.detail -o %(output)s.fasta -u %(bes)s   '''%( 
         {
             "output":output,
-            "bes":best_output,
+            "bes":all_reads,
             "overlap":overlap
         }  
     )
