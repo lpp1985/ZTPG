@@ -5,11 +5,16 @@ import (
 	"bufio"
 	"bytes"
 	"flag"
+	"strconv"
 	//	"fmt"
 	. "lpp"
 	"os"
 )
 
+func Conver(input []byte) int {
+	number, _ := strconv.Atoi(string(input))
+	return number
+}
 func main() {
 
 	output := flag.String("o", "output", "output")
@@ -29,16 +34,28 @@ func main() {
 	for {
 		line, err := file_handle.Next()
 		data_all := bytes.Fields(bytes.TrimSpace(line))
+
 		if len(data_all) < 3 {
 			break
 		}
+		query := string(data_all[0])
+		subject := string(data_all[1])
+		query_start := Conver(data_all[5])
+		query_end := Conver(data_all[6])
+		query_length := Conver(data_all[7])
+		subj_start := Conver(data_all[9])
+		subj_end := Conver(data_all[10])
+		subj_length := Conver(data_all[11])
 		if string(data_all[len(data_all)-1]) == "contains" {
 			all_filtered[string(data_all[1])] = ""
 
 		} else if string(data_all[len(data_all)-1]) == "contained" {
 			all_filtered[string(data_all[0])] = ""
+		} else if query_end-query_start == query_length {
+			all_filtered[query] = ""
+		} else if subj_end-subj_start == subj_length {
+			all_filtered[subject] = ""
 		}
-
 		if err != nil {
 			break
 		}

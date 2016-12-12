@@ -12,14 +12,9 @@ def GenerateOverlapGraph(FILE):
     
     for line in FILE:
         data = []
-        line_l = line.split()
-        tag = "+"
-        if line_l[8]=='-':
-            tag = "-"
-        data.append( str(int(line_l[0]))+'+' )
-        data.append( str(int(line_l[1]))+tag )
-        print(data)
-        Overlap_Graph.add_bi_path(data)  
+        line_l = line.strip().split()
+       
+        Overlap_Graph.add_bi_path(line_l)  
     return Overlap_Graph
         
 all_nodes = {}
@@ -28,19 +23,24 @@ if __name__=='__main__':
 transfer trim overlap relationship'''
     parser = OptionParser(usage =usage )
 
-    parser.add_option("-i", "--INPUT", action="store",
-                      dest="inp", 
-                      help="Input overlap") 
+    parser.add_option("-e", "--Edge", action="store",
+                      dest="edge", 
+                      help="edge Info") 
+    parser.add_option("-n", "--Node", action="store",
+                      dest="node", 
+                      help="edge Info")     
 
 
     parser.add_option("-o", "--out", action="store",
                       dest="output",
                       help="The output name you want!!") 
     (options, args) = parser.parse_args()
-    inp = options.inp
+    edge = options.edge
     output = os.path.abspath(options.output)
-    Overlap_Graph = GenerateOverlapGraph( open(inp,'rU'))
-   
+    Overlap_Graph = GenerateOverlapGraph( open(edge,'rU'))
+    for line in open(options.node):
+        
+        Overlap_Graph.add_node(line.strip())
     
     
     

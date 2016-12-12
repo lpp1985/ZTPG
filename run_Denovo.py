@@ -95,7 +95,7 @@ if __name__=='__main__':
         
         
     SeqAlign_Command = cele_path+'''/DALIGNER/HPC.daligner -v -B40 -T32 -t16 -e.95 -l1000 -s1000 Reads | csh -v '''  
-    #os.system(SeqAlign_Command)
+    os.system(SeqAlign_Command)
     #err = subprocess.Popen(  shlex.split( SeqAlign_Command ),stderr=subprocess.PIPE  ).communicate()
     #if not err[0]:
         #print( colored("Reads Self-Align   OK!!","green")  )  
@@ -106,36 +106,31 @@ if __name__=='__main__':
     
     
     MergeAlign_Command = cele_path+'''/DALIGNER/LAmerge  Alignment Reads*.las'''    
-    print(MergeAlign_Command)
-    err = subprocess.Popen(  shlex.split( MergeAlign_Command ),stderr=subprocess.PIPE  ).communicate()
-    if not err[0]:
-        #os.system("rm Reads*.las ")
-        print( colored("Reads Self-Align Merge   OK!!","green")  )  
-    else:
-        print(colored(err[0],'red'))
-        print( colored('Step2 Reads Self-Align Merge Error!','red') )    
-        sys.exit()     
+
+    os.system(MergeAlign_Command)
     
-    SortAlign_Command = cele_path+'''/DALIGNER/LAsort  Merge'''    
-    err = subprocess.Popen(  shlex.split( SortAlign_Command ),stderr=subprocess.PIPE  ).communicate()
-    if not err[0]:
-        os.system("mv Merge.S.las Merge.las")
-        print( colored("Reads Self-Align sort   OK!!","green")  )  
-    else:
-        print(colored(err[0],'red'))
-        print( colored('Step2 Reads Self-Align Merge Error!','red') )    
-        sys.exit()         
+    SortAlign_Command = cele_path+'''/DALIGNER/LAsort  Alignment && mv Alignment.S.las Alignment.las'''    
+    os.system( SortAlign_Command  )
+    #err = subprocess.Popen(  shlex.split( SortAlign_Command ),stderr=subprocess.PIPE  ).communicate()
+    #if not err[0]:
+        #os.system("mv Alignment.S.las Alignment.las")
+        #print( colored("Reads Self-Align sort   OK!!","green")  )  
+    #else:
+        #print(colored(err[0],'red'))
+        #print( colored('Step2 Reads Self-Align Merge Error!','red') )    
+        #sys.exit()         
 
     
-    LA4Falcon_Command = cele_path+'''/DALIGNER/LA4Falcon -mog Reads  Merge >Alignment.m4'''    
-    err = subprocess.Popen(  shlex.split( LA4Falcon_Command ),stderr=subprocess.PIPE  ).communicate()
-    if not err[0]:
+    LA4Falcon_Command = cele_path+'''/DALIGNER/LA4Falcon -mog Reads  Alignment >Alignment.m4''' 
+    os.system(LA4Falcon_Command)
+    #err = subprocess.Popen(  shlex.split( LA4Falcon_Command ),stderr=subprocess.PIPE  ).communicate()
+    #if not err[0]:
        
-        print( colored("Reads LA4Falcon  OK!!","green")  )  
-    else:
-        print(colored(err[0],'red'))
-        print( colored('Step2 LA4Falcon Error!','red') )    
-        sys.exit()         
+        #print( colored("Reads LA4Falcon  OK!!","green")  )  
+    #else:
+        #print(colored(err[0],'red'))
+        #print( colored('Step2 LA4Falcon Error!','red') )    
+        #sys.exit()         
 
     LAFilter_Command = cele_path+'''/DAFilter -i Alignment.m4 -o FilterAlignment.m4'''    
     err = subprocess.Popen(  shlex.split( LAFilter_Command ),stderr=subprocess.PIPE  ).communicate()

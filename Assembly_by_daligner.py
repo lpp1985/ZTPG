@@ -121,7 +121,7 @@ def Single_Assembly(RAW,OUTPUT,all_raw_seq_hash):
  
                     end_node = max( [ int(data_l[0]), int(data_l[1])  ]  )
                     if int(data_l[1]) - int(data_l[0]) ==1 and data_l[4] =="0" and data_l[8]=="0":
-                        if int(data_l[8])  - int(data_l[7]) <100 and  int(data_l[9])<100:
+                        if int(data_l[7])  - int(data_l[6]) <100 and  int(data_l[9])<100:
                             output_seq_hash[end_node]  = all_reads[end_node][ int(data_l[10]):  ]
   
                     elif int(data_l[0]) - int(data_l[1]) ==1 and data_l[4] =="0" and data_l[8]=="0":
