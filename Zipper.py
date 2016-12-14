@@ -118,24 +118,27 @@ if __name__=="__main__":
 
 	Transitive_Command = "Transitive_Remove -i FilterAlignment.m4  -l %s -g OVL -o Graph.detail"%(overlap_length)
 	os.system(Transitive_Command)
+	need_assembly = ["%s.unitig.detail"%(output)]
+	need_assembly.append( "%s.unitig.Plasmid"%(output) )
+	Contig_Generate = "Generate_Contig.py -c -r -e OVL.edges  -n OVL.nodes  -o ./%s.unitig"%(output)
+	os.system( Contig_Generate )
+	if reassembly:
+		Contig_Generate = "Generate_Contig.py -r -e OVL.edges  -n OVL.nodes  -o ./%s"%(output)
+		os.system(Contig_Generate)
+		need_assembly.append( "%s.Alle.detail"%(output) )
+	if circluar:
+		Contig_Generate = "Generate_Contig.py -c -r -e OVL.edges  -n OVL.nodes  -o ./%s"%(output)
+		os.system(Contig_Generate)
+		need_assembly.append( "%s.Alle.Plasmid"%(output) )		
 	if assembly:
 		Unitig_Generate = "Generate_Unitig -f %s  -i Graph.detail -o Unitig_element.fasta"%( all_name  )
 		os.system(  Unitig_Generate )
-		Contig_Generate = "Generate_Contig.py  -e OVL.edges  -n OVL.nodes  -o ./%s.contig"%(output)
-		if reassembly:
-			Contig_Generate = "Generate_Contig.py -c -e OVL.edges  -n OVL.nodes  -o ./%s.contig"%(output)
+		for key in need_assembly:
+			Assembly_Generate = " Assembly_ThroughUnitig.py  -i ./%s  -r %s  -o ./%s -u Unitig_element.fasta  " %( key,all_name, key )
 		
-		os.system(  Contig_Generate )
-		Assembly_Generate = " Assembly_ThroughUnitig.py  -i ./%s.contig.detail  -r %s  -o ./%s.contig -u Unitig_element.fasta  " %( output,all_name, output )
-		
-		os.system(Assembly_Generate)
+			os.system(Assembly_Generate)
  
-	if circluar:
-		
-		
-		
-		Circle_Generate = "Find_Circle_Denovo.py  -i %s -o %s.Cir -g OVL.edges "%( all_name, output)
-		os.system(Circle_Generate)
+
 		
 		
 

@@ -66,7 +66,7 @@ transfer trim overlap relationship'''
 		need_list = line_l[1].split("; ")
 		out_seq = all_reads[ need_list[0]  ]
 		for i in xrange(0,len(need_list)-1):
-			print(  need_list[i],need_list[i+1] )
+
 			out_seq+= unitig_seq[ need_list[i] ][ need_list[i+1] ]
 		END.write('>'+name+'\t'+status+'\n')
 		END.write( out_seq +'\n')

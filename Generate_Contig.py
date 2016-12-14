@@ -38,11 +38,19 @@ transfer trim overlap relationship'''
                       dest="cir",
                       default=False,
             
-                      help="The output name you want!!")     
+                      help="The output name you want!!")   
+    parser.add_option("-r", "--Alle", action="store_true",
+                      dest="alle",
+                      default=False,
+
+                      help="The output name you want!!")       
     
     (options, args) = parser.parse_args()
     edge = options.edge
+    alle = options.alle
     cir = options.cir
+    if cir:
+        alle= True
     output = os.path.abspath(options.output)
     Overlap_Graph = GenerateOverlapGraph( open(edge,'rU'))
     for line in open(options.node):
@@ -69,7 +77,7 @@ transfer trim overlap relationship'''
         
     #去等位基因
    
-    if cir:
+    if alle:
         NewG_Output,removed_node_hash = Alle_Removal(G_Output)
         removed_path = []
         
@@ -93,19 +101,19 @@ transfer trim overlap relationship'''
         for start,end in G_Output.edges():
             EDGE.write(  start+'\t'+end+'\n' )
         
-        
-        total_cycle = Find_Cycle(G_Output)
-        name = output.split('/')[-1]+"_CirCular"
-        i=0
-
-        for each_cycle in total_cycle:
-            i+=1 
-            path = []
-            for each_c in each_cycle:
-                if each_c[-1]=="+":
-                    path.extend(  Contig_path[each_c]  )
-                else:
-                    path.extend(  Reverse_Path(Contig_path[each_c[:-1]+'+'])  )
-            PLASMID.write(name+str(i)+'\t'+'; '.join(path  )  +"\tPlasmid\n"  )
+        if cir:
+            total_cycle = Find_Cycle(G_Output)
+            name = output.split('/')[-1]+"_CirCular"
+            i=0
+    
+            for each_cycle in total_cycle:
+                i+=1 
+                path = []
+                for each_c in each_cycle:
+                    if each_c[-1]=="+":
+                        path.extend(  Contig_path[each_c]  )
+                    else:
+                        path.extend(  Reverse_Path(Contig_path[each_c[:-1]+'+'])  )
+                PLASMID.write(name+str(i)+'\t'+'; '.join(path  )  +"\tPlasmid\n"  )
            
         
