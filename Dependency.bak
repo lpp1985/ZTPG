@@ -187,23 +187,6 @@ def Remove_rev_Singleton(  G   ):
             if node.endswith('-'):
                 singleton_deleted.append( node )
     G.remove_nodes_from( singleton_deleted  )	
-def Alle_Removal(G):
-    deleted = {}
-    for eachNode in G.nodes():
-        succers = G.successors(eachNode)
-        if len(succers)==2:
-            eachsucc1,eachsucc2 = succers
-            if eachsucc1 not in deleted and eachsucc2 not in deleted: 
-                if len(  G.predecessors(eachsucc1) )==1 and len(  G.predecessors(eachsucc2) )==1 and G.successors(eachsucc1) == G.successors(eachsucc2)  and len(  G.successors(eachsucc1)  )==1:
-                    if eachsucc1[:-1] != eachsucc2[:-1]:
-                        deleted[eachsucc1] = ""
-                        deleted[ eachsucc1.translate(libary) ] = ""
-    New_Graph = deepcopy(G)
-
-    for node in deleted:
-        New_Graph.remove_bi_node(node)
-    return New_Graph,deleted
-
 
 def Orphan_Removal( G ):
     '''删除一系列寡妇节点，如
@@ -221,23 +204,11 @@ def Orphan_Removal( G ):
 
             deleted[eachNode]=""
             new_name = eachNode.translate(libary)
-            deleted[new_name]=""   
-    while len(deleted)>0:
-        for key in deleted:
+            deleted[new_name]=""            
+    for key in deleted:
 
-            if key in New_Graph.node:
-                New_Graph.remove_bi_node(key)
-        deleted = {}
-        G = New_Graph
-        New_Graph = deepcopy(G)
-        for eachNode in G.nodes():
-            if eachNode in deleted:
-                continue
-            if len( G.successors(eachNode) )==0 or len( G.predecessors(eachNode) )==0 :
-        
-                deleted[eachNode]=""
-                new_name = eachNode.translate(libary)
-                deleted[new_name]=""         
+        if key in New_Graph.node:
+            New_Graph.remove_bi_node(key)
             
     return New_Graph
 
@@ -282,8 +253,7 @@ def Get_list(  has_list,location_list  ):
     return output_list
 
 def Get_Contig( G ,DETAIL,name_prefix ):
-    global Assembled_Contig_no
-    Assembled_Contig_no = 1
+
     """获得contig，并且将一些单链和成环的contig删除"""
     #G_Trimed输出被检查过的结果
     #has_checked输出不需要检查的节点（已经是其他contig的子路径，或者该路径已经被查询完毕）
@@ -291,7 +261,7 @@ def Get_Contig( G ,DETAIL,name_prefix ):
     #另外，deleted_node还记录已经被检查完，放入contig的reads，在最后的图中，统一删除
     #Contig_relation 记录每一个contig的连接关系
 
-    all_path = {}
+
     deleted_node = {}
     plasmid_contig = {}
     Contig_relation = {}
@@ -446,11 +416,10 @@ def Get_Contig( G ,DETAIL,name_prefix ):
 
             category =  "Chain"
             #节点迁移
-            
             DETAIL.write (new_contig_name+'\t'+'; '.join(path)+"\t"+category+'\n'  )
             G_Output.add_node(new_contig_name+'+', name = new_contig_name+'+' )
             G_Output.add_node(new_contig_name+'-', name = new_contig_name+'-' )
-        all_path[new_contig_name+'+'] = path
+
 
 
 
@@ -485,7 +454,7 @@ def Get_Contig( G ,DETAIL,name_prefix ):
                 if each_key in rela_5:
                     G_Output.add_bi_edge(each_node,rela_5[each_key])
 
-    return  Contig_relation, plasmid_contig,G_Output,all_path
+    return  Contig_relation, plasmid_contig,G_Output
 
 
 def Get_Reference_Graph(  FILE  ):

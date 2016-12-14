@@ -54,40 +54,10 @@ transfer trim overlap relationship'''
     DETAIL = open(options.output+'.detail', 'w')
     if cir:
         Overlap_Graph = Orphan_Removal(Overlap_Graph)
-        Overlap_Graph,removed_node_hash = Alle_Removal(Overlap_Graph)
-    Contig_relation,plasmid_contig ,G_Output,Contig_path = Get_Contig(Overlap_Graph,DETAIL,output.split('/')[-1])
+    Contig_relation,plasmid_contig ,G_Output = Get_Contig(Overlap_Graph,DETAIL,output.split('/')[-1])
 
     END = open(options.output+'.graph','w' )    
     Draw_Web(options.output+'.graph.html', G_Output)
     RELA = open( options.output+'.rela' ,'w')
-    PLASMID = open( options.output+'.Plasmid' ,'w')
-    for key,path in plasmid_contig.items():
-        PLASMID.write( key+'\t'+'; '.join(path)+'\tPlasmid\n' )
-        
     for name,components in Contig_relation.items():
         RELA.write(name+'\t'+components[0]+'\t'+components[-1]+'\n')    
-        
-    #去等位基因
-   
-    if cir:
-        NewG_Output,removed_node_hash = Alle_Removal(G_Output)
-        removed_path = []
-        
-        for each_removedcontig in removed_node_hash:
-            
-            removed_path.extend(  Contig_path[ each_removedcontig[:-1]+'+'  ]  )
-        for node in removed_path:
-            Overlap_Graph.remove_bi_node(node)
-            
-        DETAIL = open(options.output+'.Alle.detail', 'w')
-        Assembled_Contig_no = 1
-        Contig_relation,plasmid_contig ,G_Output,Contig_path = Get_Contig(Overlap_Graph,DETAIL,output.split('/')[-1])
-        
-        END = open(options.output+'.Alle.graph','w' )    
-        Draw_Web(options.output+'.Alle.graph.html', G_Output)
-        RELA = open( options.output+'.Alle.rela' ,'w')
-        PLASMID = open( options.output+'.Alle.Plasmid' ,'w') 
-        EDGE = open( options.output+'.Alle.edge' ,'w')
-        for start,end in G_Output.edges():
-            EDGE.write(  start+'\t'+end+'\n' )
-        

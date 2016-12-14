@@ -48,7 +48,13 @@ def get_para(   ):
 	                  action = "store_true",
 	                  default = False,
 	                  help="Assembly?"
-	                  )			
+	                  )	
+	parser.add_option("-r","--Reassembly",
+		          dest="reassembly",
+		          action = "store_true",
+		          default = False,
+		          help="Assembly?"
+		          )	
 	parser.add_option("-c","--Circular",
 	                  action = "store_true",
 	                  dest="circular",
@@ -60,7 +66,7 @@ def get_para(   ):
 	return options,args
 if __name__=="__main__":
 	options,args = get_para()
-
+	reassembly = options.reassembly
 	query = options.query
 	identity = options.identity
 	output = options.output
@@ -93,7 +99,7 @@ if __name__=="__main__":
 	splitDB_Command = '''DBsplit Reads'''    
 	os.system(splitDB_Command)
 
-	SeqAlign_Command = '''HPC.daligner -v -B40 -T32 -t16 -e%s -l1000 -s1000 Reads | csh -v '''%(identity)
+	SeqAlign_Command = '''HPC.daligner -v -B40 -T32 -t16 -e%s  Reads | csh -v '''%(identity)
 
 	os.system( SeqAlign_Command )
 	MergeAlign_Command = '''LAmerge  Alignment Reads*.las && rm Reads*.las'''
@@ -116,15 +122,21 @@ if __name__=="__main__":
 		Unitig_Generate = "Generate_Unitig -f %s  -i Graph.detail -o Unitig_element.fasta"%( all_name  )
 		os.system(  Unitig_Generate )
 		Contig_Generate = "Generate_Contig.py  -e OVL.edges  -n OVL.nodes  -o ./%s.contig"%(output)
+		if reassembly:
+			Contig_Generate = "Generate_Contig.py -c -e OVL.edges  -n OVL.nodes  -o ./%s.contig"%(output)
+		
 		os.system(  Contig_Generate )
 		Assembly_Generate = " Assembly_ThroughUnitig.py  -i ./%s.contig.detail  -r %s  -o ./%s.contig -u Unitig_element.fasta  " %( output,all_name, output )
 		
 		os.system(Assembly_Generate)
  
 	if circluar:
+		
+		
+		
 		Circle_Generate = "Find_Circle_Denovo.py  -i %s -o %s.Cir -g OVL.edges "%( all_name, output)
-		print( Circle_Generate )
 		os.system(Circle_Generate)
+		
 		
 
 

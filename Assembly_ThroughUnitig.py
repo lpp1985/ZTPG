@@ -48,7 +48,7 @@ transfer trim overlap relationship'''
 	all_reads = {}
 	unitig_seq = Ddict()
 	for t,s in fasta_check( open(reads,'rU')):
-		name = t[1:].strip()
+		name = t[1:].strip().split()[0]
 		s = re.sub("\s+","",s)
 		all_reads[name+'+']= s
 		s1 = complement(s)
