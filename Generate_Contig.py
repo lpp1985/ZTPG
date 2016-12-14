@@ -88,6 +88,24 @@ transfer trim overlap relationship'''
         RELA = open( options.output+'.Alle.rela' ,'w')
         PLASMID = open( options.output+'.Alle.Plasmid' ,'w') 
         EDGE = open( options.output+'.Alle.edge' ,'w')
+        for key,path in plasmid_contig.items():
+            PLASMID.write( key+'\t'+'; '.join(path)+'\tPlasmid\n' )        
         for start,end in G_Output.edges():
             EDGE.write(  start+'\t'+end+'\n' )
+        
+        
+        total_cycle = Find_Cycle(G_Output)
+        name = output.split('/')[-1]+"_CirCular"
+        i=0
+
+        for each_cycle in total_cycle:
+            i+=1 
+            path = []
+            for each_c in each_cycle:
+                if each_c[-1]=="+":
+                    path.extend(  Contig_path[each_c]  )
+                else:
+                    path.extend(  Reverse_Path(Contig_path[each_c[:-1]+'+'])  )
+            PLASMID.write(name+str(i)+'\t'+'; '.join(path  )  +"\tPlasmid\n"  )
+           
         

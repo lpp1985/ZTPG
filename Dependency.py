@@ -911,6 +911,11 @@ def Find_Cycle(Graph):
 
     return all_cycle
 
+def Reverse_Path(path):
+    rev_path = []
+    for node in path[::-1]:
+        rev_path.append( node.translate(libary) )
+    return rev_path
 
 
 
