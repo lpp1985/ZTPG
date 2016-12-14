@@ -1,14 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 #coding:utf-8
 # Author:   --<>
 # Purpose: 
 # Created: 2014/4/2
-from lpp import *
 import os,tempfile,sys
+sys.path.append(os.path.split(__file__)[0]+'/../Lib/')
+from lpp import *
+from optparse import OptionParser
+
 import subprocess
 #对拼接结果进行环化
 def Circulation(sequence):
-	return sequence
 	sequence = re.sub( "\s+","",sequence )
 	RAW = open(tempfile.mktemp() ,'w' )
 	RAW.write(">RAW\n%s\n"%(  sequence ) )
@@ -18,23 +20,42 @@ def Circulation(sequence):
 	
 	stdout = os.popen( command_line  ).read()
 	try:
-		start_location = int(stdout.split()[0])
+		start_location = int(stdout.split()[0])-1
 		end = sequence[:start_location]
 		end = re.sub( "(\w{60})" ,"\\1\n", end )
 	except:
-		print(command_line)
-		print( " is not cir!!")
-		return sequence
+		if Veri:
+			raise Exception( "%s is Error!"%(t.split())  )
+		return sequence,"Linear"
 
-	return end.upper()
+	return end.upper(),"Circle"
 
 if __name__=="__main__":
-	RAW = fasta_check(open(sys.argv[1],'rU'))
-	END = open(sys.argv[2],'w')
-	STAT = open("seq_status.tsv",'w')
+	usage = "python2.7 %prog [options]"
+	parser = OptionParser(usage =usage )	
+	parser.add_option("-i", "--Input", action="store",
+		              dest="Input",
+	
+		              help="Input Fasta")
+	parser.add_option("-o", "--Output", action="store",
+		              dest="output",
+	
+		              help="OutputPath")
+	parser.add_option("-v", "--Verification", 
+	                  action="store_true",
+	                  dest="verfi",
+	                  help="Assembly Verification?")
+	(options, args) = parser.parse_args()
+	Input = options.Input
+	Output = options.output	
+	Veri = options.verfi
+	RAW = fasta_check(open(Input,'rU'))
+	END = open(Output,'w')
+	STATS = open(Output+'.status','w')
 	for t,s in RAW:
 		
-		s = Circulation(s)
-		END.write(t+s+'\n')
-		STAT.write(t[1:-1]+'\t%s\n'%( len( re.sub("\s+","",s)   )  ))
+		s,status = Circulation(s)
+		END.write(t.split()[0]+"  %s\n"%(status)+s+'\n')
+		s1 = re.sub("\s+", "", s)
+		STATS.write(t.split()[0][1:] +'\t%s\t%s\n'%(  status,len(s1)    )  )
 		
