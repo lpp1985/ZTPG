@@ -82,7 +82,7 @@ if __name__=='__main__':
 
 
     DETAIL = open(options.output+'.detail', 'w')
-    Contig_relation,plasmid_contig ,G_Output = Get_Contig(Corrected_overlap_Graph,DETAIL,'round1_')
+    Contig_relation,plasmid_contig ,G_Output,Output_Path = Get_Contig(Corrected_overlap_Graph,DETAIL,'round1_')
 
     END = open(options.output+'.graph','w' )
     

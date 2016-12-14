@@ -53,7 +53,7 @@ def get_para(   ):
 		          dest="reassembly",
 		          action = "store_true",
 		          default = False,
-		          help="Assembly?"
+		          help=" Alle Deletion"
 		          )	
 	parser.add_option("-c","--Circular",
 	                  action = "store_true",
