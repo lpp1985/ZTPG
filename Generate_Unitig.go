@@ -12,6 +12,11 @@ import (
 	"strconv"
 )
 
+func ConverData(char []byte) string {
+	data, _ := strconv.Atoi(string(char))
+	result := strconv.Itoa(data)
+	return result
+}
 func ConverInt(char []byte) int {
 
 	result, _ := strconv.Atoi(string(char))
@@ -59,8 +64,8 @@ func main() {
 			break
 		}
 		line_l := bytes.Fields(line)
-		query := string(line_l[0])
-		subj := string(line_l[1])
+		query := ConverData(line_l[0])
+		subj := ConverData(line_l[1])
 		query_end := ConverInt(line_l[6])
 		query_start := ConverInt(line_l[5])
 		subj_start := ConverInt(line_l[9])
