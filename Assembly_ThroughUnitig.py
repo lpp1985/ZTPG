@@ -43,6 +43,8 @@ transfer trim overlap relationship'''
 	(options, args) = parser.parse_args()
 	inp = options.inp
 	output = options.output
+	if output.endswith(".detail"):
+		output = re.sub("\.detail$","",output)
 	unitig = options.unitig
 	reads = options.reads
 	all_reads = {}
